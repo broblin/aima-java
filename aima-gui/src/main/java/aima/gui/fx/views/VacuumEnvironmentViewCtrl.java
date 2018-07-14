@@ -60,9 +60,9 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
         agentSymbols.clear();
         super.initialize(env);
         VacuumEnvironment vEnv = (VacuumEnvironment) env;
-        for (String loc : vEnv.getLocations()) {
-            SquareButton btn = getSquareButton(vEnv.getX(loc), vEnv.getY(loc));
-            btn.getIdLabel().setText(loc);
+        for (Object loc : vEnv.getLocations()) {
+            SquareButton btn = getSquareButton(vEnv.getX(loc.toString()), vEnv.getY(loc.toString()));
+            btn.getIdLabel().setText(loc.toString());
         }
     }
 
@@ -81,9 +81,9 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
     @Override
     protected void update() {
         VacuumEnvironment vEnv = ((VacuumEnvironment) env);
-        for (String loc : vEnv.getLocations()) {
-            SquareButton btn = getSquareButton(vEnv.getX(loc), vEnv.getY(loc));
-            if (vEnv.getLocationState(loc).equals(LocationState.Dirty))
+        for (Object loc : vEnv.getLocations()) {
+            SquareButton btn = getSquareButton(vEnv.getX(loc.toString()), vEnv.getY(loc.toString()));
+            if (vEnv.getLocationState(loc.toString()).equals(LocationState.Dirty))
                 btn.getLabel().setText("Dirty");
             else
                 btn.getLabel().setText(""); // "Clean"
@@ -106,9 +106,9 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
         else {
             VacuumEnvironment vEnv = (VacuumEnvironment) env;
             VacuumEnvironmentState state = (VacuumEnvironmentState) vEnv.getCurrentState();
-            String loc = vEnv.getLocation(x, y);
+            Object loc = vEnv.getLocation(x, y);
             state.setLocationState(loc,
-                    state.getLocationState(loc) == LocationState.Clean ? LocationState.Dirty : LocationState.Clean);
+                    state.getLocationState(loc.toString()) == LocationState.Clean ? LocationState.Dirty : LocationState.Clean);
             update();
             perceptLabel.setText("");
         }

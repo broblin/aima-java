@@ -16,8 +16,8 @@ import java.util.Map;
  */
 public class VacuumEnvironmentState implements EnvironmentState, Percept, Cloneable {
 
-	private Map<String, VacuumEnvironment.LocationState> state;
-	private Map<Agent, String> agentLocations;
+	private Map<Object, VacuumEnvironment.LocationState> state;
+	private Map<Agent, Object> agentLocations;
 
 	/**
 	 * Constructor
@@ -28,13 +28,13 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 	}
 
 	public String getAgentLocation(Agent a) {
-		return agentLocations.get(a);
+		return agentLocations.get(a) != null ? agentLocations.get(a).toString() : null;
 	}
 
 	/**
 	 * Sets the agent location
 	 */
-	public void setAgentLocation(Agent a, String location) {
+	public void setAgentLocation(Agent a, Object location) {
 		agentLocations.put(a, location);
 	}
 
@@ -45,7 +45,7 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 	/**
 	 * Sets the location state
 	 */
-	public void setLocationState(String location, VacuumEnvironment.LocationState s) {
+	public void setLocationState(Object location, VacuumEnvironment.LocationState s) {
 		state.put(location, s);
 	}
 
@@ -89,12 +89,12 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder("{");
-		for (Map.Entry<String, VacuumEnvironment.LocationState> entity : state.entrySet()) {
+		for (Map.Entry<Object, VacuumEnvironment.LocationState> entity : state.entrySet()) {
 			if (builder.length() > 2) builder.append(", ");
 			builder.append(entity.getKey()).append("=").append(entity.getValue());
 		}
 		int i = 0;
-		for (Map.Entry<Agent, String> entity : agentLocations.entrySet()) {
+		for (Map.Entry<Agent, Object> entity : agentLocations.entrySet()) {
 			if (builder.length() > 2) builder.append(", ");
 			builder.append("Loc").append(++i).append("=").append(entity.getValue());
 		}
