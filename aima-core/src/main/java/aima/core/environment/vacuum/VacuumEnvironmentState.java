@@ -17,7 +17,7 @@ import java.util.Map;
 public class VacuumEnvironmentState implements EnvironmentState, Percept, Cloneable {
 
 	private Map<Object, VacuumEnvironment.LocationState> state;
-	private Map<Agent, Object> agentLocations;
+	private Map<Agent, Coord> agentLocations;
 
 	/**
 	 * Constructor
@@ -27,18 +27,18 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 		agentLocations = new LinkedHashMap<>();
 	}
 
-	public String getAgentLocation(Agent a) {
-		return agentLocations.get(a) != null ? agentLocations.get(a).toString() : null;
+	public Coord getAgentLocation(Agent a) {
+		return agentLocations.get(a) != null ? agentLocations.get(a) : null;
 	}
 
 	/**
 	 * Sets the agent location
 	 */
-	public void setAgentLocation(Agent a, Object location) {
+	public void setAgentLocation(Agent a, Coord location) {
 		agentLocations.put(a, location);
 	}
 
-	public VacuumEnvironment.LocationState getLocationState(String location) {
+	public VacuumEnvironment.LocationState getLocationState(Coord location) {
 		return state.get(location);
 	}
 
@@ -94,7 +94,7 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 			builder.append(entity.getKey()).append("=").append(entity.getValue());
 		}
 		int i = 0;
-		for (Map.Entry<Agent, Object> entity : agentLocations.entrySet()) {
+		for (Map.Entry<Agent, Coord> entity : agentLocations.entrySet()) {
 			if (builder.length() > 2) builder.append(", ");
 			builder.append("Loc").append(++i).append("=").append(entity.getValue());
 		}

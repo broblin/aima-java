@@ -26,7 +26,7 @@ public class LocalVacuumEnvironmentPercept extends DynamicPercept {
 	 * @param state
 	 *            the agent's perception of the current state.
 	 */
-	public LocalVacuumEnvironmentPercept(String agentLocation,
+	public LocalVacuumEnvironmentPercept(Coord agentLocation,
 			VacuumEnvironment.LocationState state) {
 		setAttribute(ATTRIBUTE_AGENT_LOCATION, agentLocation);
 		setAttribute(ATTRIBUTE_STATE, state);
@@ -39,8 +39,8 @@ public class LocalVacuumEnvironmentPercept extends DynamicPercept {
 	 * @return the agent's perception of the current location, which is either A
 	 *         or B.
 	 */
-	public String getAgentLocation() {
-		return (String) getAttribute(ATTRIBUTE_AGENT_LOCATION);
+	public Coord getAgentLocation() {
+		return (Coord) getAttribute(ATTRIBUTE_AGENT_LOCATION);
 	}
 
 	/**

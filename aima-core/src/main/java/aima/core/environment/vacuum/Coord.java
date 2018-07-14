@@ -1,4 +1,4 @@
-package aima.core.environment.vacuum.extended;
+package aima.core.environment.vacuum;
 
 /**
  *
@@ -7,6 +7,11 @@ package aima.core.environment.vacuum.extended;
 public class Coord {
     int x;
     int y;
+
+    public Coord(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     /**
      * dans l'exercice, l'aspirateur ne peut pas aller en diagonale

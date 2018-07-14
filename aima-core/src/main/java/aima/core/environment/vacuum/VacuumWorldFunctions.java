@@ -55,8 +55,8 @@ public class VacuumWorldFunctions {
             VacuumEnvironmentState s = state.clone();
             results.add(s);
 
-            String currentLocation = state.getAgentLocation(agent);
-            String adjacentLocation = (currentLocation.equals(VacuumEnvironment.LOCATION_A))
+            Coord currentLocation = state.getAgentLocation(agent);
+            Coord adjacentLocation = (currentLocation.equals(VacuumEnvironment.LOCATION_A))
                     ? VacuumEnvironment.LOCATION_B : VacuumEnvironment.LOCATION_A;
 
             if (action == VacuumEnvironment.ACTION_MOVE_RIGHT) {

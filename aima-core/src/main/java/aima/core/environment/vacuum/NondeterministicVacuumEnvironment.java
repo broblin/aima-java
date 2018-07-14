@@ -49,8 +49,8 @@ public class NondeterministicVacuumEnvironment extends VacuumEnvironment {
         } else if (ACTION_SUCK == action) {
             // case: square is dirty
             if (VacuumEnvironment.LocationState.Dirty == envState.getLocationState(envState.getAgentLocation(a))) {
-                String currentLocation = envState.getAgentLocation(a);
-                String adjacentLocation = (currentLocation.equals("A")) ? "B" : "A";
+                Coord currentLocation = envState.getAgentLocation(a);
+                Coord adjacentLocation = (currentLocation.equals(LOCATION_A)) ? LOCATION_B : LOCATION_A;
                 // always clean current square
                 envState.setLocationState(currentLocation, VacuumEnvironment.LocationState.Clean);
                 // possibly clean adjacent square
