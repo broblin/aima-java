@@ -12,6 +12,7 @@ import aima.core.agent.Agent;
 import aima.core.agent.Environment;
 import aima.core.agent.Percept;
 import aima.core.agent.impl.DynamicAction;
+import aima.core.environment.vacuum.Coord;
 import aima.core.environment.vacuum.VacuumEnvironment;
 import aima.gui.swing.framework.EmptyEnvironmentView;
 
@@ -47,13 +48,13 @@ public class VacuumView extends EmptyEnvironmentView {
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
-		List<String> locations = getLocations();
+		List<Coord> locations = getLocations();
 		adjustTransformation(0, 0, 11 * locations.size() - 1, 10);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setBackground(Color.white);
 		g2.clearRect(0, 0, getWidth(), getHeight());
 		for (int i = 0; i < locations.size(); i++) {
-			String location = locations.get(i);
+			Coord location = locations.get(i);
 			Agent agent = getAgent(location);
 			if (isDirty(location)) {
 				g2.setColor(Color.LIGHT_GRAY);
@@ -74,8 +75,8 @@ public class VacuumView extends EmptyEnvironmentView {
 	}
 
 	/** Returns the names of all locations used. */
-	protected List<String> getLocations() {
-		List<String> result = new ArrayList<String>();
+	protected List<Coord> getLocations() {
+		List<Coord> result = new ArrayList<Coord>();
 		if (env != null) {
 			result.add(VacuumEnvironment.LOCATION_A);
 			result.add(VacuumEnvironment.LOCATION_B);
@@ -84,7 +85,7 @@ public class VacuumView extends EmptyEnvironmentView {
 	}
 
 	/** Checks whether the specified location is dirty. */
-	protected boolean isDirty(String location) {
+	protected boolean isDirty(Coord location) {
 		return VacuumEnvironment.LocationState.Dirty == getVacuumEnv().getLocationState(location);
 	}
 

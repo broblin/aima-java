@@ -4,6 +4,7 @@ import aima.core.agent.Action;
 import aima.core.agent.Agent;
 import aima.core.agent.Environment;
 import aima.core.agent.Percept;
+import aima.core.environment.vacuum.Coord;
 import aima.core.environment.vacuum.VacuumEnvironment;
 import aima.core.environment.vacuum.VacuumEnvironment.LocationState;
 import aima.core.environment.vacuum.VacuumEnvironmentState;
@@ -60,8 +61,8 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
         agentSymbols.clear();
         super.initialize(env);
         VacuumEnvironment vEnv = (VacuumEnvironment) env;
-        for (Object loc : vEnv.getLocations()) {
-            SquareButton btn = getSquareButton(vEnv.getX(loc.toString()), vEnv.getY(loc.toString()));
+        for (Coord loc : vEnv.getLocations()) {
+            SquareButton btn = getSquareButton(vEnv.getX(loc), vEnv.getY(loc));
             btn.getIdLabel().setText(loc.toString());
         }
     }
@@ -81,16 +82,16 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
     @Override
     protected void update() {
         VacuumEnvironment vEnv = ((VacuumEnvironment) env);
-        for (Object loc : vEnv.getLocations()) {
-            SquareButton btn = getSquareButton(vEnv.getX(loc.toString()), vEnv.getY(loc.toString()));
-            if (vEnv.getLocationState(loc.toString()).equals(LocationState.Dirty))
+        for (Coord loc : vEnv.getLocations()) {
+            SquareButton btn = getSquareButton(vEnv.getX(loc), vEnv.getY(loc));
+            if (vEnv.getLocationState(loc).equals(LocationState.Dirty))
                 btn.getLabel().setText("Dirty");
             else
                 btn.getLabel().setText(""); // "Clean"
             btn.getPane().getChildren().clear();
         }
         for (Agent agent : vEnv.getAgents()) {
-            String loc = vEnv.getAgentLocation(agent);
+            Coord loc = vEnv.getAgentLocation(agent);
             SquareButton btn = getSquareButton(vEnv.getX(loc), vEnv.getY(loc));
             Double orientation = agentOrientations.get(agent);
             if (orientation == null)
@@ -106,9 +107,9 @@ public class VacuumEnvironmentViewCtrl extends AbstractGridEnvironmentViewCtrl {
         else {
             VacuumEnvironment vEnv = (VacuumEnvironment) env;
             VacuumEnvironmentState state = (VacuumEnvironmentState) vEnv.getCurrentState();
-            Object loc = vEnv.getLocation(x, y);
+            Coord loc = vEnv.getLocation(x, y);
             state.setLocationState(loc,
-                    state.getLocationState(loc.toString()) == LocationState.Clean ? LocationState.Dirty : LocationState.Clean);
+                    state.getLocationState(loc) == LocationState.Clean ? LocationState.Dirty : LocationState.Clean);
             update();
             perceptLabel.setText("");
         }
