@@ -35,8 +35,9 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	public static final Action ACTION_MOVE_RIGHT = new DynamicAction("Right");
 	public static final Action ACTION_GO_DOWN = new DynamicAction("Down");
 	public static final Action ACTION_SUCK = new DynamicAction("Suck");
-	public static final String LOCATION_A = "A";
-	public static final String LOCATION_B = "B";
+	//it begins by 1 (not 0 like java index)
+	public static final Coord LOCATION_A = new Coord(1,1);
+	public static final Coord LOCATION_B = new Coord(2,1);
 
 	int xDimension;
 	int yDimension;
@@ -45,7 +46,7 @@ public class VacuumEnvironment extends AbstractEnvironment {
 		Clean, Dirty
 	}
 
-    protected final List<Object> locations;
+    protected final List<Coord> locations;
 	protected VacuumEnvironmentState envState = null;
 	protected boolean isDone = false;
 
@@ -78,17 +79,17 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	 * of squares. Two-dimensional grid environments can be defined by additionally overriding
 	 * {@link #getXDimension()} and {@link #getYDimension()}.
 	 */
-	protected VacuumEnvironment(List<Object> locations, LocationState... locStates) {
+	protected VacuumEnvironment(List<Coord> locations, LocationState... locStates) {
 		this.locations = locations;
-		xDimension = locations.size();
-		yDimension = 1;
+		xDimension = locations.stream().max((coord,coord2) -> Integer.compare(coord.x,coord2.x)).get().x;
+		yDimension = locations.stream().max((coord,coord2) -> Integer.compare(coord.y,coord2.y)).get().y;
 
 		envState = new VacuumEnvironmentState();
 		for (int i = 0; i < locations.size() && i < locStates.length; i++)
 			envState.setLocationState(locations.get(i), locStates[i]);
 	}
 
-	public List<Object> getLocations() {
+	public List<Coord> getLocations() {
 		return locations;
 	}
 
@@ -96,11 +97,11 @@ public class VacuumEnvironment extends AbstractEnvironment {
 		return envState;
 	}
 
-	public LocationState getLocationState(String location) {
+	public LocationState getLocationState(Coord location) {
 		return envState.getLocationState(location);
 	}
 
-	public String getAgentLocation(Agent a) {
+	public Coord getAgentLocation(Agent a) {
 		return envState.getAgentLocation(a);
 	}
 
@@ -111,7 +112,7 @@ public class VacuumEnvironment extends AbstractEnvironment {
 		super.addAgent(a);
 	}
 
-	public void addAgent(Agent a, String location) {
+	public void addAgent(Agent a, Coord location) {
 		// Ensure the agent state information is tracked before
 		// adding to super, as super will notify the registered
 		// EnvironmentViews that is was added.
@@ -126,13 +127,13 @@ public class VacuumEnvironment extends AbstractEnvironment {
 			return envState.clone();
 		}
 		// Other agents get a local percept.
-		String loc = envState.getAgentLocation(anAgent);
+		Coord loc = envState.getAgentLocation(anAgent);
 		return new LocalVacuumEnvironmentPercept(loc, envState.getLocationState(loc));
 	}
 
 	@Override
 	public void executeAction(Agent a, Action action) {
-		String loc = getAgentLocation(a);
+		Coord loc = getAgentLocation(a);
 		if (ACTION_MOVE_RIGHT == action) {
 			int x = getX(loc);
 			if (x < getXDimension())
@@ -184,17 +185,17 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	}
 
 	// 1 means left
-	public int getX(String location) {
-		return getLocations().indexOf(location) % getXDimension() + 1;
+	public int getX(Coord location) {
+		return location.x;
 	}
 
 	// 1 means bottom
-	public int getY(String location) {
-		return getYDimension() - getLocations().indexOf(location) / getXDimension();
+	public int getY(Coord location) {
+		return location.y;
 	}
 
 	// (1, 1) is bottom left
-	public Object getLocation(int x, int y) {
-		return locations.get((getYDimension() - y) * getXDimension() + x - 1);
+	public Coord getLocation(int x, int y) {
+		return locations.stream().filter(coord -> coord.x == x && coord.y == y).findFirst().get();
 	}
 }
