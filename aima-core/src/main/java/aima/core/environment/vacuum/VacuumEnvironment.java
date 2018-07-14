@@ -31,16 +31,21 @@ import java.util.Random;
 public class VacuumEnvironment extends AbstractEnvironment {
 	// Allowable Actions within the Vacuum Environment
 	public static final Action ACTION_MOVE_LEFT = new DynamicAction("Left");
+	public static final Action ACTION_GO_UP = new DynamicAction("Up");
 	public static final Action ACTION_MOVE_RIGHT = new DynamicAction("Right");
+	public static final Action ACTION_GO_DOWN = new DynamicAction("Down");
 	public static final Action ACTION_SUCK = new DynamicAction("Suck");
 	public static final String LOCATION_A = "A";
 	public static final String LOCATION_B = "B";
+
+	int xDimension;
+	int yDimension;
 
 	public enum LocationState {
 		Clean, Dirty
 	}
 
-    private final List<String> locations;
+    protected final List<Object> locations;
 	protected VacuumEnvironmentState envState = null;
 	protected boolean isDone = false;
 
@@ -73,14 +78,17 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	 * of squares. Two-dimensional grid environments can be defined by additionally overriding
 	 * {@link #getXDimension()} and {@link #getYDimension()}.
 	 */
-	protected VacuumEnvironment(List<String> locations, LocationState... locStates) {
+	protected VacuumEnvironment(List<Object> locations, LocationState... locStates) {
 		this.locations = locations;
+		xDimension = locations.size();
+		yDimension = 1;
+
 		envState = new VacuumEnvironmentState();
 		for (int i = 0; i < locations.size() && i < locStates.length; i++)
 			envState.setLocationState(locations.get(i), locStates[i]);
 	}
 
-	public List<String> getLocations() {
+	public List<Object> getLocations() {
 		return locations;
 	}
 
@@ -135,6 +143,16 @@ public class VacuumEnvironment extends AbstractEnvironment {
 			if (x > 1)
 				envState.setAgentLocation(a, getLocation(x - 1, getY(loc)));
 			updatePerformanceMeasure(a, -1);
+		} else if (ACTION_GO_DOWN == action) {
+			int y = getY(loc);
+			if (y > 1)
+				envState.setAgentLocation(a, getLocation(getX(loc), y - 1));
+			updatePerformanceMeasure(a, -1);
+		} else if (ACTION_GO_UP == action) {
+			int y = getY(loc);
+			if (y < getYDimension())
+				envState.setAgentLocation(a, getLocation(getX(loc), y + 1));
+			updatePerformanceMeasure(a, -1);
 		} else if (ACTION_SUCK == action) {
 			if (LocationState.Dirty == envState.getLocationState(envState
 					.getAgentLocation(a))) {
@@ -158,11 +176,11 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	// Information for grid views...
 
 	public int getXDimension() {
-		return locations.size();
+		return xDimension;
 	}
 
 	public int getYDimension() {
-		return 1;
+		return yDimension;
 	}
 
 	// 1 means left
@@ -176,7 +194,7 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	}
 
 	// (1, 1) is bottom left
-	public String getLocation(int x, int y) {
+	public Object getLocation(int x, int y) {
 		return locations.get((getYDimension() - y) * getXDimension() + x - 1);
 	}
 }
