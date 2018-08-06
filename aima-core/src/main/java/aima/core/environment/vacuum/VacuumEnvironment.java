@@ -79,7 +79,7 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	 * of squares. Two-dimensional grid environments can be defined by additionally overriding
 	 * {@link #getXDimension()} and {@link #getYDimension()}.
 	 */
-	protected VacuumEnvironment(List<Coord> locations, LocationState... locStates) {
+	public VacuumEnvironment(List<Coord> locations, LocationState... locStates) {
 		this.locations = locations;
 		xDimension = locations.stream().max((coord,coord2) -> Integer.compare(coord.x,coord2.x)).get().x;
 		yDimension = locations.stream().max((coord,coord2) -> Integer.compare(coord.y,coord2.y)).get().y;
