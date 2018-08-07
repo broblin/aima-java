@@ -114,4 +114,37 @@ public class PositionSensorSimpleReflexAgentTest {
                 actionTracker.getActions());
     }
 
+    @Test
+    public void testNonRationalAgent(){
+        //given : an 3x2 environement with the coord 2,1 dirty
+        VacuumEnvironment tve = new VacuumEnvironment(
+                new ArrayList<Coord>() {{
+                    add(new Coord(1,1));
+                    add(new Coord(1,2));
+                    add(new Coord(2,2));
+                    add(new Coord(2,1));
+                    add(new Coord(3,1));
+                    add(new Coord(3,2));
+                }},
+                new  VacuumEnvironment.LocationState[] {VacuumEnvironment.LocationState.Clean,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Clean,
+                        VacuumEnvironment.LocationState.Clean});
+        agent.configure(3,2);
+        tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
+
+        tve.addEnvironmentView(actionTracker);
+
+        //when : 10 steps
+        tve.step(10);
+
+        //the coord 2,1 is still dirty and the target finish to produce the 2 sames actions at infinite
+        Assert.assertEquals(
+                "Action[name=Up], Action[name=Suck], Action[name=Right], Action[name=Suck], Action[name=Right], Action[name=Down], Action[name=Up], Action[name=Down], Action[name=Up], Action[name=Down]",
+                actionTracker.getActions());
+        Assert.assertEquals(tve.getLocationState(new Coord(2,1)),VacuumEnvironment.LocationState.Dirty);
+    }
+
 }
