@@ -107,4 +107,57 @@ public class RandomSimpleReflexAgentTest {
         System.out.println("agent performance : "+tve.getPerformanceMeasure(agent)+" agent avec hasard: "+tveForRandomAgent.getPerformanceMeasure(randomAgent));
         Assert.assertTrue(tve.getPerformanceMeasure(agent) < tveForRandomAgent.getPerformanceMeasure(randomAgent));
     }
+
+    @Test
+    public void testBadPerformanceRandomSimpleReflexAgent(){
+        ArrayList<Coord> tveDims = new ArrayList<Coord>() {{
+            add(new Coord(1,1));
+            add(new Coord(2,1));
+            add(new Coord(3,1));
+            add(new Coord(4,1));
+            add(new Coord(5,1));
+            add(new Coord(6,1));
+            add(new Coord(7,1));
+            add(new Coord(8,1));
+        }};
+        VacuumEnvironment.LocationState[] locationStates = new  VacuumEnvironment.LocationState[] {VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty,
+                VacuumEnvironment.LocationState.Dirty};
+
+
+        //given : an 3x2 environement with the coord 2,1 dirty
+        VacuumEnvironment tve = new VacuumEnvironment(
+                tveDims,
+                locationStates);
+        VacuumEnvironment tveForRandomAgent = new VacuumEnvironment(
+                tveDims,
+                locationStates);
+        agent.configure(8,1);
+        randomAgent.configure(8,1);
+
+        tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
+        tveForRandomAgent.addAgent(randomAgent, VacuumEnvironment.LOCATION_A);
+
+        tve.addEnvironmentView(actionTracker);
+        tveForRandomAgent.addEnvironmentView(randomActionTracker);
+
+        //when : X steps
+        tve.step(10);
+        tveForRandomAgent.step(10);
+
+        //the coord 2,1 is still dirty and the target finish to produce the 2 sames actions at infinite
+
+        //Assert.assertEquals(
+        //        "Action[name=Up], Action[name=Suck], Action[name=Right], Action[name=Suck], Action[name=Right], Action[name=Down], Action[name=Up], Action[name=Down], Action[name=Up], Action[name=Down]",
+        //        actionTracker.getActions());
+        System.out.println(actionTracker.getActions());
+        System.out.println(randomActionTracker.getActions());
+        System.out.println("agent performance : "+tve.getPerformanceMeasure(agent)+" agent avec hasard: "+tveForRandomAgent.getPerformanceMeasure(randomAgent));
+        Assert.assertTrue(tve.getPerformanceMeasure(agent) > tveForRandomAgent.getPerformanceMeasure(randomAgent));
+    }
 }
