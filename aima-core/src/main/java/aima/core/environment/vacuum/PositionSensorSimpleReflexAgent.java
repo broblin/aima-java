@@ -33,7 +33,7 @@ public class PositionSensorSimpleReflexAgent extends AbstractAgent {
     //
     // PRIVATE METHODS
     //
-    private Set<Rule> getRuleSet() {
+    protected Set<Rule> getRuleSet() {
         // Note: Using a LinkedHashSet so that the iteration order (i.e. implied
         // precedence) of rules can be guaranteed.
         Set<Rule> rules = new LinkedHashSet<Rule>();
