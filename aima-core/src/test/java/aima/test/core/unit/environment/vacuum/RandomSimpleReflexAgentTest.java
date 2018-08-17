@@ -31,6 +31,36 @@ public class RandomSimpleReflexAgentTest {
 
     @Test
     public void testRandomVsSimpleReflexAgent(){
+        VacuumEnvironment tve = new VacuumEnvironment(
+                VacuumEnvironment.LocationState.Clean,
+                VacuumEnvironment.LocationState.Dirty);
+        VacuumEnvironment tveForRandomAgent = new VacuumEnvironment(
+                VacuumEnvironment.LocationState.Clean,
+                VacuumEnvironment.LocationState.Dirty);
+
+        tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
+        tveForRandomAgent.addAgent(randomAgent, VacuumEnvironment.LOCATION_A);
+
+        tve.addEnvironmentView(actionTracker);
+        tveForRandomAgent.addEnvironmentView(randomActionTracker);
+
+        //when : X steps
+        tve.step(10);
+        tveForRandomAgent.step(10);
+
+        //the coord 2,1 is still dirty and the target finish to produce the 2 sames actions at infinite
+
+        //Assert.assertEquals(
+        //        "Action[name=Up], Action[name=Suck], Action[name=Right], Action[name=Suck], Action[name=Right], Action[name=Down], Action[name=Up], Action[name=Down], Action[name=Up], Action[name=Down]",
+        //        actionTracker.getActions());
+        System.out.println(actionTracker.getActions());
+        System.out.println(randomActionTracker.getActions());
+        System.out.println("agent performance : "+tve.getPerformanceMeasure(agent)+" agent avec hasard: "+tveForRandomAgent.getPerformanceMeasure(randomAgent));
+        Assert.assertTrue(tve.getPerformanceMeasure(agent) < tveForRandomAgent.getPerformanceMeasure(randomAgent));
+    }
+
+    @Test
+    public void testRandomVsSimpleReflexAgent2(){
         ArrayList<Coord> tveDims = new ArrayList<Coord>() {{
             add(new Coord(1,1));
             add(new Coord(1,2));
