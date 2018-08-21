@@ -1,31 +1,21 @@
 package aima.core.agent.impl.aprog.simplerule;
 
-import aima.core.agent.impl.ObjectWithDynamicAttributes;
 import aima.core.environment.vacuum.Coord;
+
+import java.util.List;
 
 /**
  * Created by benoit on 05/08/2018.
  */
-public class CanGoDownCondition extends Condition {
+public class CanGoDownCondition extends CanMoveCondition {
 
-    private Object key;
-
-    private int minY;
-
-    public CanGoDownCondition(Object key, int minY){
-        this.key = key;
-        this.minY = minY;
-    }
 
     @Override
-    public boolean evaluate(ObjectWithDynamicAttributes p) {
-        return  ((Coord) p.getAttribute(key)).getY() > minY;
+    public Coord findNextCoord(Coord currentLocation) {
+        return new Coord(currentLocation.getX(),currentLocation.getY()-1);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        return sb.append(key).append(".y >").append(minY).toString();
+    public CanGoDownCondition(Object currentLocationKey, List<Coord> allLocations) {
+        super(currentLocationKey, allLocations);
     }
 }

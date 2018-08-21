@@ -3,6 +3,7 @@ package aima.core.environment.vacuum;
 import aima.core.agent.impl.aprog.simplerule.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,11 +15,13 @@ public class RandomSimpleReflexAgent extends PositionSensorSimpleReflexAgent {
         super();
     }
 
-    public RandomSimpleReflexAgent(int xEnvironmentDimension, int yEnvironmentDimension) {
-        super(xEnvironmentDimension, yEnvironmentDimension);
+    public RandomSimpleReflexAgent(List<Coord> allLocations) {
+        super(allLocations);
     }
 
+
     //
+
     // PRIVATE METHODS
     //
     protected Set<Rule> getRuleSet() {
@@ -32,22 +35,22 @@ public class RandomSimpleReflexAgent extends PositionSensorSimpleReflexAgent {
         rules.add(new Rule( new ANDCondition(
                 new CanGoUpCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                getyEnvironmentDimension()), new RandomCondition()),
+                        allLocations), new RandomCondition()),
                 VacuumEnvironment.ACTION_GO_UP));
         rules.add(new Rule( new ANDCondition(
                 new CanMoveRightCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                getxEnvironmentDimension()),new RandomCondition()),
+                        allLocations),new RandomCondition()),
                 VacuumEnvironment.ACTION_MOVE_RIGHT));
         rules.add(new Rule( new ANDCondition(
                 new CanGoDownCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                1),new RandomCondition()),
+                        allLocations),new RandomCondition()),
                 VacuumEnvironment.ACTION_GO_DOWN));
         rules.add(new Rule(new ANDCondition(
                 new CanMoveLeftCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                1),new RandomCondition()),
+                        allLocations),new RandomCondition()),
                 VacuumEnvironment.ACTION_MOVE_LEFT));
 
         return rules;

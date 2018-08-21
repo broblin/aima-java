@@ -4,6 +4,7 @@ import aima.core.agent.impl.aprog.PositionSensorModelBasedReflexAgentProgram;
 import aima.core.agent.impl.aprog.simplerule.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import static aima.core.agent.impl.aprog.PositionSensorModelBasedReflexAgentProgram.VISITED_LOCATIONS;
@@ -16,14 +17,14 @@ public class PositionSensorModelBasedReflexAgent extends PositionSensorSimpleRef
     public PositionSensorModelBasedReflexAgent() {
     }
 
-    public PositionSensorModelBasedReflexAgent(int xEnvironmentDimension, int yEnvironmentDimension) {
-        super(xEnvironmentDimension, yEnvironmentDimension);
+    public PositionSensorModelBasedReflexAgent(List<Coord> allLocations) {
+        super();
+        configure(allLocations);
     }
 
     @Override
-    public void configure(int xEnvironmentDimension,int yEnvironmentDimension){
-        this.xEnvironmentDimension = xEnvironmentDimension;
-        this.yEnvironmentDimension = yEnvironmentDimension;
+    public void configure(List<Coord> allLocations){
+        this.allLocations = allLocations;
         program = new PositionSensorModelBasedReflexAgentProgram(getRuleSet());
     }
 
@@ -39,25 +40,25 @@ public class PositionSensorModelBasedReflexAgent extends PositionSensorSimpleRef
         rules.add(new Rule( new ANDCondition(
                 new CanGoUpCondition(
                         LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                        getyEnvironmentDimension()), new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
+                        allLocations), new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,VacuumEnvironment.ACTION_GO_UP)),
                 VacuumEnvironment.ACTION_GO_UP));
         rules.add(new Rule( new ANDCondition(
                 new CanMoveRightCondition(
                         LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                        getxEnvironmentDimension()),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
+                        allLocations),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,VacuumEnvironment.ACTION_MOVE_RIGHT)),
                 VacuumEnvironment.ACTION_MOVE_RIGHT));
         rules.add(new Rule( new ANDCondition(
                 new CanGoDownCondition(
                         LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                        1),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
+                        allLocations),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,VacuumEnvironment.ACTION_GO_DOWN)),
                 VacuumEnvironment.ACTION_GO_DOWN));
         rules.add(new Rule(new ANDCondition(
                 new CanMoveLeftCondition(
                         LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                        1),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
+                        allLocations),new HasNotBeenVisitedCondition(VISITED_LOCATIONS,
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,VacuumEnvironment.ACTION_MOVE_LEFT)),
                 VacuumEnvironment.ACTION_MOVE_LEFT));
 

@@ -5,6 +5,7 @@ import aima.core.agent.impl.aprog.SimpleReflexAgentProgram;
 import aima.core.agent.impl.aprog.simplerule.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,21 +13,20 @@ import java.util.Set;
  */
 public class PositionSensorSimpleReflexAgent extends AbstractAgent {
 
-    int xEnvironmentDimension;
-    int yEnvironmentDimension;
+
+    List<Coord> allLocations;
 
     public PositionSensorSimpleReflexAgent() {
         super();
     }
 
-    public PositionSensorSimpleReflexAgent(int xEnvironmentDimension,int yEnvironmentDimension) {
+    public PositionSensorSimpleReflexAgent(List<Coord> allLocations) {
         super();
-        configure(xEnvironmentDimension,yEnvironmentDimension);
+        configure(allLocations);
     }
 
-    public void configure(int xEnvironmentDimension,int yEnvironmentDimension){
-        this.xEnvironmentDimension = xEnvironmentDimension;
-        this.yEnvironmentDimension = yEnvironmentDimension;
+    public void configure(List<Coord> allLocations){
+        this.allLocations = allLocations;
         program = new SimpleReflexAgentProgram(getRuleSet());
     }
 
@@ -47,37 +47,21 @@ public class PositionSensorSimpleReflexAgent extends AbstractAgent {
                 VacuumEnvironment.ACTION_SUCK));
         rules.add(new Rule(new CanGoUpCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                getyEnvironmentDimension()),
+                allLocations),
                 VacuumEnvironment.ACTION_GO_UP));
         rules.add(new Rule(new CanMoveRightCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                getxEnvironmentDimension()),
+                allLocations),
                 VacuumEnvironment.ACTION_MOVE_RIGHT));
         rules.add(new Rule(new CanGoDownCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                1),
+                allLocations),
                 VacuumEnvironment.ACTION_GO_DOWN));
         rules.add(new Rule(new CanMoveLeftCondition(
                 LocalVacuumEnvironmentPercept.ATTRIBUTE_AGENT_LOCATION,
-                1),
+                allLocations),
                 VacuumEnvironment.ACTION_MOVE_LEFT));
 
         return rules;
-    }
-
-    public int getxEnvironmentDimension() {
-        return xEnvironmentDimension;
-    }
-
-    public void setxEnvironmentDimension(int xEnvironmentDimension) {
-        this.xEnvironmentDimension = xEnvironmentDimension;
-    }
-
-    public int getyEnvironmentDimension() {
-        return yEnvironmentDimension;
-    }
-
-    public void setyEnvironmentDimension(int yEnvironmentDimension) {
-        this.yEnvironmentDimension = yEnvironmentDimension;
     }
 }

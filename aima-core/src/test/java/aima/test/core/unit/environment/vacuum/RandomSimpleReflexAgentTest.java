@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by benoit on 17/08/2018.
@@ -23,8 +25,9 @@ public class RandomSimpleReflexAgentTest {
 
     @Before
     public void setUp() {
-        agent = new PositionSensorSimpleReflexAgent(2,1);
-        randomAgent = new RandomSimpleReflexAgent(2,1);
+        List<Coord> allLocations = Arrays.asList(VacuumEnvironment.LOCATION_A, VacuumEnvironment.LOCATION_B);
+        agent = new PositionSensorSimpleReflexAgent(allLocations);
+        randomAgent = new RandomSimpleReflexAgent(allLocations);
         actionTracker = new SimpleActionTracker();
         randomActionTracker = new SimpleActionTracker();
     }
@@ -84,8 +87,8 @@ public class RandomSimpleReflexAgentTest {
         VacuumEnvironment tveForRandomAgent = new VacuumEnvironment(
                 tveDims,
                 locationStates);
-        agent.configure(3,2);
-        randomAgent.configure(3,2);
+        agent.configure(tveDims);
+        randomAgent.configure(tveDims);
 
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
         tveForRandomAgent.addAgent(randomAgent, VacuumEnvironment.LOCATION_A);
@@ -137,8 +140,8 @@ public class RandomSimpleReflexAgentTest {
         VacuumEnvironment tveForRandomAgent = new VacuumEnvironment(
                 tveDims,
                 locationStates);
-        agent.configure(8,1);
-        randomAgent.configure(8,1);
+        agent.configure(tveDims);
+        randomAgent.configure(tveDims);
 
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
         tveForRandomAgent.addAgent(randomAgent, VacuumEnvironment.LOCATION_A);

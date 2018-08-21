@@ -3,28 +3,19 @@ package aima.core.agent.impl.aprog.simplerule;
 import aima.core.agent.impl.ObjectWithDynamicAttributes;
 import aima.core.environment.vacuum.Coord;
 
+import java.util.List;
+
 /**
  * Created by benoit on 05/08/2018.
  */
-public class CanMoveRightCondition extends Condition {
-    private Object key;
-
-    private int maxX;
-
-    public CanMoveRightCondition(Object key, int maxX){
-        this.key = key;
-        this.maxX = maxX;
-    }
+public class CanMoveRightCondition extends CanMoveCondition {
 
     @Override
-    public boolean evaluate(ObjectWithDynamicAttributes p) {
-        return ((Coord) p.getAttribute(key)).getX() < maxX;
+    public Coord findNextCoord(Coord currentLocation) {
+        return new Coord(currentLocation.getX()+1,currentLocation.getY());
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        return sb.append(key).append(".x <").append(maxX).toString();
+    public CanMoveRightCondition(Object currentLocationKey, List<Coord> allLocations) {
+        super(currentLocationKey, allLocations);
     }
 }

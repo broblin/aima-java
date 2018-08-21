@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by benoit.roblin on 06/08/18.
@@ -21,7 +23,8 @@ public class PositionSensorSimpleReflexAgentTest {
 
     @Before
     public void setUp() {
-        agent = new PositionSensorSimpleReflexAgent(2,1);
+        List<Coord> allLocations = Arrays.asList(VacuumEnvironment.LOCATION_A, VacuumEnvironment.LOCATION_B);
+        agent = new PositionSensorSimpleReflexAgent(allLocations);
         actionTracker = new SimpleActionTracker();
     }
 
@@ -91,18 +94,19 @@ public class PositionSensorSimpleReflexAgentTest {
 
     @Test
     public void testCleanDirtyDirtyClean() {
-        VacuumEnvironment tve = new VacuumEnvironment(
-                new ArrayList<Coord>() {{
-                    add(new Coord(1,1));
-                    add(new Coord(1,2));
-                    add(new Coord(2,2));
-                    add(new Coord(2,1));
-                }},
+        List<Coord> tveDims = new ArrayList<Coord>() {{
+            add(new Coord(1,1));
+            add(new Coord(1,2));
+            add(new Coord(2,2));
+            add(new Coord(2,1));
+        }};
+                VacuumEnvironment tve = new VacuumEnvironment(
+                tveDims,
                 new  VacuumEnvironment.LocationState[] {VacuumEnvironment.LocationState.Clean,
                 VacuumEnvironment.LocationState.Dirty,
                 VacuumEnvironment.LocationState.Dirty,
                 VacuumEnvironment.LocationState.Clean});
-        agent.configure(2,2);
+        agent.configure(tveDims);
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
 
         tve.addEnvironmentView(actionTracker);
@@ -117,22 +121,23 @@ public class PositionSensorSimpleReflexAgentTest {
     @Test
     public void testNonRationalAgent(){
         //given : an 3x2 environement with the coord 2,1 dirty
+        List<Coord> tveDims = new ArrayList<Coord>() {{
+            add(new Coord(1,1));
+            add(new Coord(1,2));
+            add(new Coord(2,2));
+            add(new Coord(2,1));
+            add(new Coord(3,1));
+            add(new Coord(3,2));
+        }};
         VacuumEnvironment tve = new VacuumEnvironment(
-                new ArrayList<Coord>() {{
-                    add(new Coord(1,1));
-                    add(new Coord(1,2));
-                    add(new Coord(2,2));
-                    add(new Coord(2,1));
-                    add(new Coord(3,1));
-                    add(new Coord(3,2));
-                }},
+                tveDims,
                 new  VacuumEnvironment.LocationState[] {VacuumEnvironment.LocationState.Clean,
                         VacuumEnvironment.LocationState.Dirty,
                         VacuumEnvironment.LocationState.Dirty,
                         VacuumEnvironment.LocationState.Dirty,
                         VacuumEnvironment.LocationState.Clean,
                         VacuumEnvironment.LocationState.Clean});
-        agent.configure(3,2);
+        agent.configure(tveDims);
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
 
         tve.addEnvironmentView(actionTracker);
@@ -145,6 +150,39 @@ public class PositionSensorSimpleReflexAgentTest {
                 "Action[name=Up], Action[name=Suck], Action[name=Right], Action[name=Suck], Action[name=Right], Action[name=Down], Action[name=Up], Action[name=Down], Action[name=Up], Action[name=Down]",
                 actionTracker.getActions());
         Assert.assertEquals(tve.getLocationState(new Coord(2,1)),VacuumEnvironment.LocationState.Dirty);
+    }
+
+    @Test
+    public void testWithUnavailable1x2(){
+        //avec un obstacle : 1,2
+        //given : an 3x2 environement with the coord 2,1 dirty
+        List<Coord> tveDims = new ArrayList<Coord>() {{
+            add(new Coord(1,1));
+            add(new Coord(2,2));
+            add(new Coord(2,1));
+            add(new Coord(3,1));
+            add(new Coord(3,2));
+        }};
+        VacuumEnvironment tve = new VacuumEnvironment(
+                tveDims,
+                new  VacuumEnvironment.LocationState[] {VacuumEnvironment.LocationState.Clean,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Dirty,
+                        VacuumEnvironment.LocationState.Clean});
+        agent.configure(tveDims);
+        tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
+
+        tve.addEnvironmentView(actionTracker);
+
+        //when : 10 steps
+        tve.step(10);
+
+        //the coord 2,1 is still dirty and the target finish to produce the 2 sames actions at infinite
+        Assert.assertEquals(
+                "Action[name=Right], Action[name=Suck], Action[name=Up], Action[name=Suck], Action[name=Right], Action[name=Down], Action[name=Suck], Action[name=Up], Action[name=Down], Action[name=Up]",
+                actionTracker.getActions());
+        Assert.assertEquals(tve.getLocationState(new Coord(2,1)),VacuumEnvironment.LocationState.Clean);
     }
 
 }

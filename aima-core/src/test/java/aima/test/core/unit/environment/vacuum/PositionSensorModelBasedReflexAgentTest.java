@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by benoit on 21/08/2018.
@@ -20,8 +22,9 @@ public class PositionSensorModelBasedReflexAgentTest {
 
     @Before
     public void setUp() {
-        agent = new PositionSensorSimpleReflexAgent(2,1);
-        modelBasedReflexAgent = new PositionSensorModelBasedReflexAgent(2,1);
+        List<Coord> allLocations = Arrays.asList(VacuumEnvironment.LOCATION_A, VacuumEnvironment.LOCATION_B);
+        agent = new PositionSensorSimpleReflexAgent(allLocations);
+        modelBasedReflexAgent = new PositionSensorModelBasedReflexAgent(allLocations);
         actionTracker = new SimpleActionTracker();
         modelBasedActionTracker = new SimpleActionTracker();
     }
@@ -76,8 +79,8 @@ public class PositionSensorModelBasedReflexAgentTest {
         VacuumEnvironment tveForModelBasedAgent = new VacuumEnvironment(
                 tveDims,
                 locationStates);
-        agent.configure(3,2);
-        modelBasedReflexAgent.configure(3,2);
+        agent.configure(tveDims);
+        modelBasedReflexAgent.configure(tveDims);
 
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
         tveForModelBasedAgent.addAgent(modelBasedReflexAgent, VacuumEnvironment.LOCATION_A);
@@ -124,8 +127,8 @@ public class PositionSensorModelBasedReflexAgentTest {
         VacuumEnvironment tveForModelBasedAgent = new VacuumEnvironment(
                 tveDims,
                 locationStates);
-        agent.configure(8,1);
-        modelBasedReflexAgent.configure(8,1);
+        agent.configure(tveDims);
+        modelBasedReflexAgent.configure(tveDims);
 
         tve.addAgent(agent, VacuumEnvironment.LOCATION_A);
         tveForModelBasedAgent.addAgent(modelBasedReflexAgent, VacuumEnvironment.LOCATION_A);
