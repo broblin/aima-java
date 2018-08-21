@@ -130,7 +130,7 @@ public class RandomSimpleReflexAgentTest {
                 VacuumEnvironment.LocationState.Dirty};
 
 
-        //given : an 3x2 environement with the coord 2,1 dirty
+        //given : an 8x1 environement with the all coord dirty
         VacuumEnvironment tve = new VacuumEnvironment(
                 tveDims,
                 locationStates);
