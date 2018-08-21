@@ -26,10 +26,6 @@ public class RandomSimpleReflexAgent extends PositionSensorSimpleReflexAgent {
         // precedence) of rules can be guaranteed.
         Set<Rule> rules = new LinkedHashSet<Rule>();
 
-        // Rules based on REFLEX-VACUUM-AGENT:
-        // Artificial Intelligence A Modern Approach (3rd Edition): Figure 2.8,
-        // page 48.
-
         rules.add(new Rule(new EQUALCondition(LocalVacuumEnvironmentPercept.ATTRIBUTE_STATE,
                 VacuumEnvironment.LocationState.Dirty),
                 VacuumEnvironment.ACTION_SUCK));
