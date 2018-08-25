@@ -16,6 +16,7 @@ import java.util.*;
  */
 public class PositionSensorModelBasedReflexAgentProgram extends ModelBasedReflexAgentProgram {
     public static final String VISITED_LOCATIONS = "visitedLocations";
+    public static final String FRONTIER_LOCATIONS = "frontierLocations";
 
     public PositionSensorModelBasedReflexAgentProgram(Set<Rule> ruleSet){
         super();

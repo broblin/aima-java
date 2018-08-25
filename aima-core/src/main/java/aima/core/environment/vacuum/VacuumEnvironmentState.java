@@ -19,12 +19,23 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 	private Map<Object, VacuumEnvironment.LocationState> state;
 	private Map<Agent, Coord> agentLocations;
 
+	private Boolean chockDetected = false;
+
+	public Boolean isChockDetected() {
+		return chockDetected;
+	}
+
+	public void setChockDetected(Boolean chockDetected) {
+		this.chockDetected = chockDetected;
+	}
+
 	/**
 	 * Constructor
 	 */
 	public VacuumEnvironmentState() {
 		state = new LinkedHashMap<>();
 		agentLocations = new LinkedHashMap<>();
+
 	}
 
 	public Coord getAgentLocation(Agent a) {
@@ -37,6 +48,8 @@ public class VacuumEnvironmentState implements EnvironmentState, Percept, Clonea
 	public void setAgentLocation(Agent a, Coord location) {
 		agentLocations.put(a, location);
 	}
+
+
 
 	public VacuumEnvironment.LocationState getLocationState(Coord location) {
 		return state.get(location);

@@ -30,8 +30,6 @@ public class PositionSensorModelBasedReflexAgent extends PositionSensorSimpleRef
 
 
     protected Set<Rule> getRuleSet() {
-        // Note: Using a LinkedHashSet so that the iteration order (i.e. implied
-        // precedence) of rules can be guaranteed.
         Set<Rule> rules = new LinkedHashSet<Rule>();
 
         rules.add(new Rule(new EQUALCondition(LocalVacuumEnvironmentPercept.ATTRIBUTE_STATE,

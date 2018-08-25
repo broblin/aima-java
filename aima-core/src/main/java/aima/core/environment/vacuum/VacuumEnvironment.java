@@ -35,6 +35,7 @@ public class VacuumEnvironment extends AbstractEnvironment {
 	public static final Action ACTION_MOVE_RIGHT = new DynamicAction("Right");
 	public static final Action ACTION_GO_DOWN = new DynamicAction("Down");
 	public static final Action ACTION_SUCK = new DynamicAction("Suck");
+	public static final Action ACTION_KEEP_SAME_DIRECTION = new DynamicAction("keepMovement");
 	//it begins by 1 (not 0 like java index)
 	public static final Coord LOCATION_A = new Coord(1,1);
 	public static final Coord LOCATION_B = new Coord(2,1);
@@ -128,31 +129,40 @@ public class VacuumEnvironment extends AbstractEnvironment {
 		}
 		// Other agents get a local percept.
 		Coord loc = envState.getAgentLocation(anAgent);
-		return new LocalVacuumEnvironmentPercept(loc, envState.getLocationState(loc));
+		return new LocalVacuumEnvironmentPercept(loc, envState.getLocationState(loc),envState.isChockDetected());
 	}
 
 	@Override
 	public void executeAction(Agent a, Action action) {
 		Coord loc = getAgentLocation(a);
+		envState.setChockDetected(false);
 		if (ACTION_MOVE_RIGHT == action) {
 			int x = getX(loc);
 			if (x < getXDimension())
 				envState.setAgentLocation(a, getLocation(x + 1, getY(loc)));
+			else
+				envState.setChockDetected(true);
 			updatePerformanceMeasure(a, -1);
 		} else if (ACTION_MOVE_LEFT == action) {
 			int x = getX(loc);
 			if (x > 1)
 				envState.setAgentLocation(a, getLocation(x - 1, getY(loc)));
+			else
+				envState.setChockDetected(true);
 			updatePerformanceMeasure(a, -1);
 		} else if (ACTION_GO_DOWN == action) {
 			int y = getY(loc);
 			if (y > 1)
 				envState.setAgentLocation(a, getLocation(getX(loc), y - 1));
+			else
+				envState.setChockDetected(true);
 			updatePerformanceMeasure(a, -1);
 		} else if (ACTION_GO_UP == action) {
 			int y = getY(loc);
 			if (y < getYDimension())
 				envState.setAgentLocation(a, getLocation(getX(loc), y + 1));
+			else
+				envState.setChockDetected(true);
 			updatePerformanceMeasure(a, -1);
 		} else if (ACTION_SUCK == action) {
 			if (LocationState.Dirty == envState.getLocationState(envState

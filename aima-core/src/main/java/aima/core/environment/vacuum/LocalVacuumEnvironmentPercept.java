@@ -1,7 +1,9 @@
 package aima.core.environment.vacuum;
 
-import aima.core.agent.Agent;
 import aima.core.agent.impl.DynamicPercept;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a local percept in the vacuum environment (i.e. details the
@@ -15,7 +17,10 @@ import aima.core.agent.impl.DynamicPercept;
 public class LocalVacuumEnvironmentPercept extends DynamicPercept {
 
 	public static final String ATTRIBUTE_AGENT_LOCATION = "agentLocation";
+	public static final String IS_CHOCK_DETECTED = "chockPerception";
 	public static final String ATTRIBUTE_STATE = "state";
+	public static final String LAST_MOVEMENT_ACTION = "lastMovementAction";
+	public static final String VISITED_LOCATIONS = "visitedLocations";
 
 	/**
 	 * Construct a vacuum environment percept from the agent's perception of the
@@ -30,6 +35,15 @@ public class LocalVacuumEnvironmentPercept extends DynamicPercept {
 			VacuumEnvironment.LocationState state) {
 		setAttribute(ATTRIBUTE_AGENT_LOCATION, agentLocation);
 		setAttribute(ATTRIBUTE_STATE, state);
+	}
+
+	public LocalVacuumEnvironmentPercept(Coord agentLocation,
+										 VacuumEnvironment.LocationState state,
+										 Boolean isChockDetected) {
+		setAttribute(ATTRIBUTE_AGENT_LOCATION, agentLocation);
+		setAttribute(ATTRIBUTE_STATE, state);
+		setAttribute(IS_CHOCK_DETECTED, isChockDetected);
+		setAttribute(VISITED_LOCATIONS,new ArrayList<Coord>(){{add(agentLocation);}});
 	}
 
 	/**
@@ -52,6 +66,10 @@ public class LocalVacuumEnvironmentPercept extends DynamicPercept {
 	 */
 	public VacuumEnvironment.LocationState getLocationState() {
 		return (VacuumEnvironment.LocationState) getAttribute(ATTRIBUTE_STATE);
+	}
+
+	public Boolean isChockDetected() {
+		return (Boolean) getAttribute(IS_CHOCK_DETECTED);
 	}
 
 	/**

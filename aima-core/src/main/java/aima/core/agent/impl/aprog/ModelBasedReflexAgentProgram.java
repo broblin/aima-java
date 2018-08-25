@@ -55,15 +55,22 @@ public abstract class ModelBasedReflexAgentProgram implements AgentProgram {
 		init();
 	}
 
+	public DynamicState getState() {
+		return state;
+	}
+
 	/**
 	 * Set the agent's current conception of the world state.
 	 * 
 	 * @param state
 	 *            the agent's current conception of the world state.
+
 	 */
 	public void setState(DynamicState state) {
 		this.state = state;
 	}
+
+
 
 	/**
 	 * Set the program's description of how the next state depends on the state

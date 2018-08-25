@@ -5,6 +5,7 @@ import aima.core.agent.impl.ObjectWithDynamicAttributes;
 import aima.core.environment.vacuum.Coord;
 import aima.core.environment.vacuum.VacuumEnvironment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ public class HasNotBeenVisitedCondition extends Condition {
     Object visitedLocationsKey;
     Object currentLocationKey;
     Action nextAction;
+    String nextActionKey;
 
     public HasNotBeenVisitedCondition(Object visitedLocationsKey, Object currentLocationKey, Action nextAction) {
         this.visitedLocationsKey = visitedLocationsKey;
@@ -23,10 +25,27 @@ public class HasNotBeenVisitedCondition extends Condition {
         this.nextAction = nextAction;
     }
 
+    public HasNotBeenVisitedCondition(Object visitedLocationsKey, Object currentLocationKey, String nextActionKey) {
+        this.visitedLocationsKey = visitedLocationsKey;
+        this.currentLocationKey = currentLocationKey;
+        this.nextActionKey = nextActionKey;
+    }
+
     @Override
     public boolean evaluate(ObjectWithDynamicAttributes p) {
         Coord currentLocation = (Coord) p.getAttribute(currentLocationKey);
-        return !((List<Coord>)p.getAttribute(visitedLocationsKey)).contains(findNextCoord(currentLocation));
+
+        List<Coord> visitedLocations = (List<Coord>)p.getAttribute(visitedLocationsKey);
+
+        if(visitedLocations == null){
+            visitedLocations = new ArrayList<>();
+        }
+
+        if(nextAction == null){
+            nextAction = (Action) p.getAttribute(nextActionKey);
+        }
+        return nextAction != null && !visitedLocations.contains(findNextCoord(currentLocation));
+
     }
 
     protected Coord findNextCoord(Coord currentLocation){
