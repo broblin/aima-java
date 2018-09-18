@@ -1,7 +1,11 @@
 package aima.core.environment.CannibalsAndMissionaries;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static aima.core.environment.CannibalsAndMissionaries.CannibalsAndMissionariesAction.*;
+
 /**
- * TODO : methode indiquant que le but est atteint
  *
  * Created by benoit on 14/09/2018.
  */
@@ -16,6 +20,8 @@ public class CannibalsAndMissionariesModel {
 
     boolean boatOnTheLeft = true;
 
+    CannibalsAndMissionariesModel previousState;
+
     public boolean isAForbiddenState(){
         boolean cannibalMajorityOnRightRiver = nbMissionariesInRightRiver < nbCannibalsInRightRiver;
         boolean cannibalMajorityOnLeftRiver = nbMissionariesInLeftRiver < nbCannibalsInLeftRiver;
@@ -26,6 +32,30 @@ public class CannibalsAndMissionariesModel {
                 cannibalMajorityOnLeftRiver ||
                 tooManyPersonsOnBoat ||
                 negativeValue;
+    }
+
+    public boolean isProblemSolved(){
+        return nbCannibalsInRightRiver == 3 && nbMissionariesInRightRiver == 3;
+    }
+    
+    public List<CannibalsAndMissionariesAction> findAllowedActionFromBoatPosition(){
+        if(boatOnTheLeft){
+            return new ArrayList<CannibalsAndMissionariesAction>(){{
+                add(PUT_ONE_MISSIONARY_FROM_LEFT_RIVER_TO_BOAT);
+                add(PUT_ONE_MISSIONARY_FROM_BOAT_TO_LEFT_RIVER);
+                add(PUT_ONE_CANNIBAL_FROM_LEFT_RIVER_TO_BOAT);
+                add(PUT_ONE_CANNIBAL_FROM_BOAT_TO_LEFT_RIVER);
+                add(MOVE_BOAT);
+            }};
+        }else{
+            return new ArrayList<CannibalsAndMissionariesAction>(){{
+                add(PUT_ONE_MISSIONARY_FROM_RIGHT_RIVER_TO_BOAT);
+                add(PUT_ONE_MISSIONARY_FROM_BOAT_TO_RIGHT_RIVER);
+                add(PUT_ONE_CANNIBAL_FROM_RIGHT_RIVER_TO_BOAT);
+                add(PUT_ONE_CANNIBAL_FROM_BOAT_TO_RIGHT_RIVER);
+                add(MOVE_BOAT);
+            }};
+        }
     }
     
     public CannibalsAndMissionariesModel clone(){
@@ -38,6 +68,7 @@ public class CannibalsAndMissionariesModel {
     
     public CannibalsAndMissionariesModel generateNewModelFromAction(CannibalsAndMissionariesAction action){
         CannibalsAndMissionariesModel newModel = this.clone();
+        newModel.previousState = this;
         switch (action){
             case PUT_ONE_CANNIBAL_FROM_BOAT_TO_RIGHT_RIVER:
                 newModel.nbCannibalsInBoat--;
@@ -72,6 +103,7 @@ public class CannibalsAndMissionariesModel {
                 newModel.nbMissionariesInLeftRiver--;
                 break;
             default:
+                newModel.boatOnTheLeft = newModel.boatOnTheLeft ? false : true;
                 break;
         }
         return newModel;
@@ -133,6 +165,14 @@ public class CannibalsAndMissionariesModel {
         this.boatOnTheLeft = boatOnTheLeft;
     }
 
+    public CannibalsAndMissionariesModel getPreviousState() {
+        return previousState;
+    }
+
+    public void setPreviousState(CannibalsAndMissionariesModel previousState) {
+        this.previousState = previousState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,7 +185,8 @@ public class CannibalsAndMissionariesModel {
         if (nbCannibalsInBoat != that.nbCannibalsInBoat) return false;
         if (nbMissionariesInRightRiver != that.nbMissionariesInRightRiver) return false;
         if (nbMissionariesInLeftRiver != that.nbMissionariesInLeftRiver) return false;
-        return nbMissionariesInBoat == that.nbMissionariesInBoat;
+        if (nbMissionariesInBoat != that.nbMissionariesInBoat) return false;
+        return boatOnTheLeft == that.boatOnTheLeft;
 
     }
 
@@ -157,6 +198,7 @@ public class CannibalsAndMissionariesModel {
         result = 31 * result + nbMissionariesInRightRiver;
         result = 31 * result + nbMissionariesInLeftRiver;
         result = 31 * result + nbMissionariesInBoat;
+        result = 31 * result + (boatOnTheLeft ? 1 : 0);
         return result;
     }
 }
