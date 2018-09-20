@@ -45,6 +45,7 @@ public class ResolutionWithUniformCostAlgorithm {
                     }
                 } else if(!modelsWithMinimumCost.containsKey(nextModel)){
                     modelsWithMinimumCost.put(nextModel,previousCost+1) ;
+                    nextStepModels.add(nextModel);
                 }
             }
 
@@ -67,9 +68,8 @@ public class ResolutionWithUniformCostAlgorithm {
 
         ResolutionWithUniformCostAlgorithm algorithm = new ResolutionWithUniformCostAlgorithm();
         algorithm.goNextStep(initModels);
-        //TODO : programmation fonctionelle pour afficher la liste
         algorithm.problemSolvedList.forEach(model -> {
-
+            System.out.println("Solution: "+model.generateWay().toString());
         });
     }
 

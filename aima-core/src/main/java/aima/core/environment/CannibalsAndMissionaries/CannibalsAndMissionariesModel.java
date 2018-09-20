@@ -1,6 +1,7 @@
 package aima.core.environment.CannibalsAndMissionaries;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static aima.core.environment.CannibalsAndMissionaries.CannibalsAndMissionariesAction.*;
@@ -45,7 +46,9 @@ public class CannibalsAndMissionariesModel {
                 add(PUT_ONE_MISSIONARY_FROM_BOAT_TO_LEFT_RIVER);
                 add(PUT_ONE_CANNIBAL_FROM_LEFT_RIVER_TO_BOAT);
                 add(PUT_ONE_CANNIBAL_FROM_BOAT_TO_LEFT_RIVER);
-                add(MOVE_BOAT);
+                if(nbCannibalsInBoat > 0 || nbMissionariesInBoat > 0){
+                    add(MOVE_BOAT);
+                }
             }};
         }else{
             return new ArrayList<CannibalsAndMissionariesAction>(){{
@@ -53,7 +56,9 @@ public class CannibalsAndMissionariesModel {
                 add(PUT_ONE_MISSIONARY_FROM_BOAT_TO_RIGHT_RIVER);
                 add(PUT_ONE_CANNIBAL_FROM_RIGHT_RIVER_TO_BOAT);
                 add(PUT_ONE_CANNIBAL_FROM_BOAT_TO_RIGHT_RIVER);
-                add(MOVE_BOAT);
+                if(nbCannibalsInBoat > 0 || nbMissionariesInBoat > 0){
+                    add(MOVE_BOAT);
+                }
             }};
         }
     }
@@ -107,6 +112,18 @@ public class CannibalsAndMissionariesModel {
                 break;
         }
         return newModel;
+    }
+
+    public List<CannibalsAndMissionariesModel> generateWay(){
+        List<CannibalsAndMissionariesModel> result = new ArrayList<>();
+        result.add(this);
+        CannibalsAndMissionariesModel previousModel = this.previousState;
+        while(previousModel != null){
+            result.add(previousModel);
+            previousModel = previousModel.previousState;
+        }
+        Collections.reverse(result);
+        return result;
     }
 
     public int getNbCannibalsInRightRiver() {
@@ -200,5 +217,19 @@ public class CannibalsAndMissionariesModel {
         result = 31 * result + nbMissionariesInBoat;
         result = 31 * result + (boatOnTheLeft ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CannibalsAndMissionariesModel{");
+        sb.append("nbCannibalsInRightRiver=").append(nbCannibalsInRightRiver);
+        sb.append(", nbCannibalsInLeftRiver=").append(nbCannibalsInLeftRiver);
+        sb.append(", nbCannibalsInBoat=").append(nbCannibalsInBoat);
+        sb.append(", nbMissionariesInRightRiver=").append(nbMissionariesInRightRiver);
+        sb.append(", nbMissionariesInLeftRiver=").append(nbMissionariesInLeftRiver);
+        sb.append(", nbMissionariesInBoat=").append(nbMissionariesInBoat);
+        sb.append(", boatOnTheLeft=").append(boatOnTheLeft);
+        sb.append('}');
+        return sb.toString();
     }
 }
