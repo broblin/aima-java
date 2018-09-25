@@ -68,6 +68,11 @@ public class CannibalsAndMissionariesModel {
         model.nbCannibalsInBoat = nbCannibalsInBoat;
         model.nbCannibalsInRightRiver = nbCannibalsInRightRiver;
         model.nbCannibalsInLeftRiver = nbCannibalsInLeftRiver;
+
+        model.nbMissionariesInBoat = nbMissionariesInBoat;
+        model.nbMissionariesInRightRiver = nbMissionariesInRightRiver;
+        model.nbMissionariesInLeftRiver = nbMissionariesInLeftRiver;
+        model.boatOnTheLeft = boatOnTheLeft;
         return model;
     }
     
