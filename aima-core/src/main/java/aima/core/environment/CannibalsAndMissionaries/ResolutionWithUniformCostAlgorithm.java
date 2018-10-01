@@ -69,7 +69,9 @@ public class ResolutionWithUniformCostAlgorithm {
         ResolutionWithUniformCostAlgorithm algorithm = new ResolutionWithUniformCostAlgorithm();
         algorithm.goNextStep(initModels);
         algorithm.problemSolvedList.forEach(model -> {
-            System.out.println("Solution: "+model.generateWay().toString());
+            List wayGenerated = model.generateWay();
+            System.out.println("Solution: "+wayGenerated.toString());
+            System.out.println("Cost: "+(wayGenerated.size()-1));
         });
     }
 

@@ -26,11 +26,13 @@ public class CannibalsAndMissionariesModel {
     public boolean isAForbiddenState(){
         boolean cannibalMajorityOnRightRiver = nbMissionariesInRightRiver < nbCannibalsInRightRiver;
         boolean cannibalMajorityOnLeftRiver = nbMissionariesInLeftRiver < nbCannibalsInLeftRiver;
+        boolean hasAtLeastOneMissionaryOnRightRiver = nbMissionariesInRightRiver > 0;
+        boolean hasAtLeastOneMissionaryOnLeftRiver = nbMissionariesInLeftRiver > 0;
         boolean tooManyPersonsOnBoat = nbCannibalsInBoat + nbMissionariesInBoat > 2;
         boolean negativeValue = nbCannibalsInRightRiver < 0 || nbCannibalsInLeftRiver < 0 || nbCannibalsInBoat <0 ||
                 nbMissionariesInRightRiver < 0 || nbMissionariesInLeftRiver < 0 || nbMissionariesInBoat <0;
-        return cannibalMajorityOnRightRiver || 
-                cannibalMajorityOnLeftRiver ||
+        return (cannibalMajorityOnRightRiver && hasAtLeastOneMissionaryOnRightRiver) ||
+                (cannibalMajorityOnLeftRiver && hasAtLeastOneMissionaryOnLeftRiver) ||
                 tooManyPersonsOnBoat ||
                 negativeValue;
     }
