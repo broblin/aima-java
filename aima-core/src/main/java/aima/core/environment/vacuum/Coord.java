@@ -19,7 +19,7 @@ public class Coord {
      * @param othery
      * @return
      */
-    int evaluateDistance(int otherx, int othery){
+    public int evaluateDistance(int otherx, int othery){
         return Math.abs(x-otherx) + Math.abs(y - othery);
     }
 
