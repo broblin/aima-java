@@ -73,8 +73,8 @@ public class CustomEightPuzzleModel {
     }
 
     private Coord findCoordSolutionFromPosition(int pos,int dim){
-        int x = pos%dim;
-        int y = pos/dim;
+        int x = pos%dim+1;
+        int y = pos/dim+1;
         return new Coord(x,y);
     }
     

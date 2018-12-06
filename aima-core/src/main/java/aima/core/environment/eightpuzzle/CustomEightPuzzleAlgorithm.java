@@ -2,6 +2,7 @@ package aima.core.environment.eightpuzzle;
 
 import aima.core.environment.vacuum.Coord;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +26,50 @@ public class CustomEightPuzzleAlgorithm {
     }
 
     public static void main(String[] args){
-        //TODO : données initials
         int dim = 3;
+        /**
+         *  7,2,4     ,8,4
+         *  5, ,6 ou 7,6,3
+         *  8,3,1    1,2,5
+         *
+         *  solution:
+         *   ,1,2
+         *  3,4,5
+         *  6,7,8
+         */
         Coord[] initialPosition = new Coord[dim*dim-1];
-        initialPosition[0] = new Coord(3,3);
+        /*initialPosition[0] = new Coord(3,3);
+        initialPosition[1] = new Coord(2,1);
+        initialPosition[2] = new Coord(2,3);
+        initialPosition[3] = new Coord(3,1);
+        initialPosition[4] = new Coord(1,2);
+        initialPosition[5] = new Coord(3,2);
+        initialPosition[6] = new Coord(1,1);
+        initialPosition[7] = new Coord(1,3);*/
+
+        initialPosition[0] = new Coord(1,2);
+        initialPosition[1] = new Coord(2,3);
+        initialPosition[2] = new Coord(3,2);
+        initialPosition[3] = new Coord(3,1);
+        initialPosition[4] = new Coord(1,2);
+        initialPosition[5] = new Coord(3,2);
+        initialPosition[6] = new Coord(1,1);
+        initialPosition[7] = new Coord(1,3);
+
+        CustomEightPuzzleModel customEightPuzzleModel = new CustomEightPuzzleModel(3);
+        customEightPuzzleModel.initializePiecesPosition(initialPosition);
+        CustomEightPuzzleAlgorithm customEightPuzzleAlgorithm = new CustomEightPuzzleAlgorithm();
+        CustomEightPuzzleModel solution = customEightPuzzleAlgorithm.goNextStep(customEightPuzzleModel);
+
+        CustomEightPuzzleModel step = solution;
+        List<CustomEightPuzzleModel> steps = new ArrayList<>();
+        while(step != null){
+            steps.add(step);
+            step = step.previousState;
+        }
+        for(int i=steps.size()-1;i>=0;i--){
+            System.out.println("etape: "+steps.get(i).toString());
+        }
+
     }
 }
