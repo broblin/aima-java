@@ -104,7 +104,7 @@ public class CustomEightPuzzleModel {
     }
     
     public boolean isSolutionFound(){
-        return gameArea.piecesPosition.equals(solutions);
+        return Arrays.equals(gameArea.piecesPosition,solutions);
     }
     
     private GameArea replaceEmptyCaseByPiecePosition(Coord coord){
@@ -121,7 +121,7 @@ public class CustomEightPuzzleModel {
         return nextGameArea;
     }
     
-    private Coord findUpperEmptyCase(){
+    private Coord findBottomEmptyCase(){
         if(gameArea.emptyCase.getY() > 1){
             return new Coord(gameArea.emptyCase.getX(),gameArea.emptyCase.getY()-1);
         }else{
@@ -129,7 +129,7 @@ public class CustomEightPuzzleModel {
         }
     }
 
-    private Coord findBottomEmptyCase(){
+    private Coord findUpperEmptyCase(){
         if(gameArea.emptyCase.getY() < dim){
             return new Coord(gameArea.emptyCase.getX(),gameArea.emptyCase.getY()+1);
         }else{

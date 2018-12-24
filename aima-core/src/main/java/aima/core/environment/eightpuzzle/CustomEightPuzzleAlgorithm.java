@@ -12,6 +12,15 @@ import java.util.Optional;
  */
 public class CustomEightPuzzleAlgorithm {
 
+    static int UN = 0;
+    static int DEUX=1;
+    static int TROIS=2;
+    static int QUATRE=3;
+    static int CINQ=4;
+    static int SIX=5;
+    static int SEPT=6;
+    static int HUIT=7;
+
     CustomEightPuzzleModel goNextStep(CustomEightPuzzleModel customEightPuzzleModel){
         List<GameArea> nextGameArea = customEightPuzzleModel.findNextPiecesPosition();
         Optional<GameArea> bestGameArea = nextGameArea.stream()
@@ -28,9 +37,9 @@ public class CustomEightPuzzleAlgorithm {
     public static void main(String[] args){
         int dim = 3;
         /**
-         *  7,2,4     ,8,4
-         *  5, ,6 ou 7,6,3
-         *  8,3,1    1,2,5
+         *  7,2,4    1,4,2
+         *  5, ,6 ou 3,5,8
+         *  8,3,1    6,7,
          *
          *  solution:
          *   ,1,2
@@ -38,23 +47,23 @@ public class CustomEightPuzzleAlgorithm {
          *  6,7,8
          */
         Coord[] initialPosition = new Coord[dim*dim-1];
-        /*initialPosition[0] = new Coord(3,3);
-        initialPosition[1] = new Coord(2,1);
-        initialPosition[2] = new Coord(2,3);
-        initialPosition[3] = new Coord(3,1);
-        initialPosition[4] = new Coord(1,2);
-        initialPosition[5] = new Coord(3,2);
-        initialPosition[6] = new Coord(1,1);
-        initialPosition[7] = new Coord(1,3);*/
+        /*initialPosition[UN] = new Coord(3,3);
+        initialPosition[DEUX] = new Coord(2,1);
+        initialPosition[TROIS] = new Coord(2,3);
+        initialPosition[QUATRE] = new Coord(3,1);
+        initialPosition[CINQ] = new Coord(1,2);
+        initialPosition[SIX] = new Coord(3,2);
+        initialPosition[SEPT] = new Coord(1,1);
+        initialPosition[HUIT] = new Coord(1,3);*/
 
-        initialPosition[0] = new Coord(1,2);
-        initialPosition[1] = new Coord(2,3);
-        initialPosition[2] = new Coord(3,2);
-        initialPosition[3] = new Coord(3,1);
-        initialPosition[4] = new Coord(1,2);
-        initialPosition[5] = new Coord(3,2);
-        initialPosition[6] = new Coord(1,1);
-        initialPosition[7] = new Coord(1,3);
+        initialPosition[UN] = new Coord(1,1);
+        initialPosition[DEUX] = new Coord(3,1);
+        initialPosition[TROIS] = new Coord(1,2);
+        initialPosition[QUATRE] = new Coord(2,1);
+        initialPosition[CINQ] = new Coord(2,2);
+        initialPosition[SIX] = new Coord(1,3);
+        initialPosition[SEPT] = new Coord(2,3);
+        initialPosition[HUIT] = new Coord(3,2);
 
         CustomEightPuzzleModel customEightPuzzleModel = new CustomEightPuzzleModel(3);
         customEightPuzzleModel.initializePiecesPosition(initialPosition);
@@ -68,7 +77,7 @@ public class CustomEightPuzzleAlgorithm {
             step = step.previousState;
         }
         for(int i=steps.size()-1;i>=0;i--){
-            System.out.println("etape: "+steps.get(i).toString());
+            System.out.println("etape: "+steps.get(i).gameArea.emptyCase.toString());
         }
 
     }
