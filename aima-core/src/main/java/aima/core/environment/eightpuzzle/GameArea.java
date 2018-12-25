@@ -46,4 +46,12 @@ public class GameArea {
         result = 31 * result + emptyCase.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "GameArea{" +
+                "piecesPosition=" + Arrays.toString(piecesPosition) +
+                ", emptyCase=" + emptyCase +
+                '}';
+    }
 }
