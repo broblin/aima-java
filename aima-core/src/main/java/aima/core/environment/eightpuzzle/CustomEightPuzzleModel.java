@@ -102,6 +102,10 @@ public class CustomEightPuzzleModel {
         }
         return totalDistance;
     }
+
+    public int heuristicFunction(){
+        return heuristicFunction(gameArea.piecesPosition);
+    }
     
     public boolean isSolutionFound(){
         return Arrays.equals(gameArea.piecesPosition,solutions);

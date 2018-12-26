@@ -53,35 +53,42 @@ public class CustomEightPuzzleAlgorithm {
     /**
      *
      * @param customEightPuzzleModel
-     * @param cost
+     * @param initialCost
      * @return
      */
-    CustomEightPuzzleModel goNextStepWithAStar(CustomEightPuzzleModel customEightPuzzleModel,int cost){
-        frontierModels.remove(customEightPuzzleModel);
-        List<GameArea> nextGameArea = customEightPuzzleModel.findNextPiecesPosition();
-        int nextCost = cost++;
+    CustomEightPuzzleModel goNextStepWithAStar(CustomEightPuzzleModel customEightPuzzleModel,int initialCost){
+        Optional<CustomEightPuzzleModel> bestCustomEightPuzzleModel = Optional.ofNullable(customEightPuzzleModel);
+        int nbLoop = 0;
 
-        Stream<GameArea> addToFrontierModel = nextGameArea.stream().filter(gameArea -> !modelsWithMinimumCost.containsKey(gameArea) || nextCost < modelsWithMinimumCost.get(gameArea));
+        while(bestCustomEightPuzzleModel.isPresent() && !bestCustomEightPuzzleModel.get().isSolutionFound()){
+            nbLoop++;
+            final CustomEightPuzzleModel currentCustomEightPuzzleModel = bestCustomEightPuzzleModel.get();
+            Integer cost = frontierModels.containsKey(currentCustomEightPuzzleModel) ? frontierModels.remove(currentCustomEightPuzzleModel) : initialCost;
+            List<GameArea> nextGameArea = currentCustomEightPuzzleModel.findNextPiecesPosition();
+            cost++;
+            final int nextCost = cost;
 
-        addToFrontierModel.forEach(gameArea -> {
-            CustomEightPuzzleModel frontierEightPuzzleModel = new CustomEightPuzzleModel(customEightPuzzleModel,gameArea);
-            modelsWithMinimumCost.put(gameArea,nextCost);
-            frontierModels.put(frontierEightPuzzleModel,nextCost);
-        });
+            Stream<GameArea> addToFrontierModel = nextGameArea.stream().filter(gameArea -> !modelsWithMinimumCost.containsKey(gameArea) || nextCost < modelsWithMinimumCost.get(gameArea));
 
+            addToFrontierModel.forEach(gameArea -> {
+                CustomEightPuzzleModel frontierEightPuzzleModel = new CustomEightPuzzleModel(currentCustomEightPuzzleModel,gameArea);
+                modelsWithMinimumCost.put(gameArea,nextCost);
+                frontierModels.put(frontierEightPuzzleModel,nextCost);
+            });
 
-        Optional<CustomEightPuzzleModel> bestCustomEightPuzzleModel = frontierModels.keySet().stream()
-                .min((frontierModel1, frontierModel2) -> frontierModels.get(frontierModel1) + customEightPuzzleModel.heuristicFunction(frontierModel1.gameArea.piecesPosition) -
-                        (frontierModels.get(frontierModel2) + customEightPuzzleModel.heuristicFunction(frontierModel2.gameArea.piecesPosition)));
-        if(!bestCustomEightPuzzleModel.isPresent()){
-            System.out.println("pas de solution trouvée, dernier item: "+customEightPuzzleModel.gameArea.toString());
-            return null;
+            bestCustomEightPuzzleModel = frontierModels.keySet().stream()
+                    .min((frontierModel1, frontierModel2) -> frontierModels.get(frontierModel1) + frontierModel1.heuristicFunction() -
+                            (frontierModels.get(frontierModel2) + frontierModel2.heuristicFunction()));
         }
-        //System.out.println("etape: "+nextCustomEightPuzzleModel.gameArea.emptyCase.toString());
-        if(bestCustomEightPuzzleModel.get().isSolutionFound()){
+
+        System.out.println(String.format("nb itérations : %d taille modelsWithMinimumCost : %d taille frontierModels : %d ",nbLoop,modelsWithMinimumCost.size(),frontierModels.size()));
+
+        if(bestCustomEightPuzzleModel.isPresent()){
+            System.out.println(String.format("coût pour arriver à la solution : %d ",frontierModels.get(bestCustomEightPuzzleModel.get())));
             return bestCustomEightPuzzleModel.get();
         }else{
-            return goNextStepWithAStar(bestCustomEightPuzzleModel.get(),nextCost);
+            System.out.println("pas de solution trouvée, dernier item: "+customEightPuzzleModel.gameArea.toString());
+            return null;
         }
     }
 
@@ -98,7 +105,7 @@ public class CustomEightPuzzleAlgorithm {
          *  6,7,8
          */
         Coord[] initialPosition = new Coord[dim*dim-1];
-        int position = 1;
+        int position = 3;
         boolean useAStarAlgorithm = true;
 
         if(position == 1){
@@ -143,7 +150,7 @@ public class CustomEightPuzzleAlgorithm {
             step = step.previousState;
         }
         for(int i=steps.size()-1;i>=0;i--){
-            System.out.println(String.format("etape %d: %s ",steps.size()-i,steps.get(i).gameArea.emptyCase.toString()));
+            System.out.println(String.format("etape %d: %s ",steps.size()-i-1,steps.get(i).gameArea.emptyCase.toString()));
         }
 
     }
