@@ -2,6 +2,7 @@ package aima.core.environment.eightpuzzle;
 
 import aima.core.environment.vacuum.Coord;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -21,6 +22,13 @@ public class CustomEightPuzzleAlgorithm {
     static int SIX=5;
     static int SEPT=6;
     static int HUIT=7;
+    static int NEUF=8;
+    static int DIX=9;
+    static int ONZE=10;
+    static int DOUZE=11;
+    static int TREIZE=12;
+    static int QUATORZE=13;
+    static int QUINZE=14;
 
     Map<GameArea,Integer> modelsWithMinimumCost = new HashMap<>();
     Map<CustomEightPuzzleModel,Integer> frontierModels = new HashMap<>();
@@ -104,8 +112,10 @@ public class CustomEightPuzzleAlgorithm {
          *  3,4,5
          *  6,7,8
          */
+        long startTime = System.currentTimeMillis();
+        System.out.println(LocalDateTime.now());
         Coord[] initialPosition = new Coord[dim*dim-1];
-        int position = 3;
+        int position = 4;
         boolean useAStarAlgorithm = true;
 
         if(position == 1){
@@ -126,7 +136,7 @@ public class CustomEightPuzzleAlgorithm {
             initialPosition[SIX] = new Coord(1,3);
             initialPosition[SEPT] = new Coord(2,3);
             initialPosition[HUIT] = new Coord(3,2);
-        }else{
+        }else if(position == 3){
             initialPosition[UN] = new Coord(1,1);
             initialPosition[DEUX] = new Coord(2,1);
             initialPosition[TROIS] = new Coord(3,1);
@@ -135,13 +145,35 @@ public class CustomEightPuzzleAlgorithm {
             initialPosition[SIX] = new Coord(3,2);
             initialPosition[SEPT] = new Coord(1,3);
             initialPosition[HUIT] = new Coord(2,3);
+        }else{
+            //dim 4
+            dim=4;
+            initialPosition = new Coord[dim*dim-1];
+            initialPosition[UN] = new Coord(1,1);
+            initialPosition[DEUX] = new Coord(2,1);
+            initialPosition[TROIS] = new Coord(4,1);
+            initialPosition[QUATRE] = new Coord(2,2);
+            initialPosition[CINQ] = new Coord(1,2);
+            initialPosition[SIX] = new Coord(4,2);
+            initialPosition[SEPT] = new Coord(3,2);
+            initialPosition[HUIT] = new Coord(2,3);
+            initialPosition[NEUF] = new Coord(1,3);
+            initialPosition[DIX] = new Coord(4,3);
+            initialPosition[ONZE] = new Coord(3,3);
+            initialPosition[DOUZE] = new Coord(2,4);
+            initialPosition[TREIZE] = new Coord(1,4);
+            initialPosition[QUATORZE] = new Coord(3,4);
+            initialPosition[QUINZE] = new Coord(4,4);
         }
 
-        CustomEightPuzzleModel customEightPuzzleModel = new CustomEightPuzzleModel(3);
+        CustomEightPuzzleModel customEightPuzzleModel = new CustomEightPuzzleModel(dim);
         customEightPuzzleModel.initializePiecesPosition(initialPosition);
         CustomEightPuzzleAlgorithm customEightPuzzleAlgorithm = new CustomEightPuzzleAlgorithm();
 
         CustomEightPuzzleModel solution = useAStarAlgorithm ? customEightPuzzleAlgorithm.goNextStepWithAStar(customEightPuzzleModel,0) : customEightPuzzleAlgorithm.goNextStepWithGreedyExploration(customEightPuzzleModel);
+
+        long stopTime = System.currentTimeMillis();
+        System.out.println(String.format("temps passé en ms : %d",stopTime-startTime));
 
         CustomEightPuzzleModel step = solution;
         List<CustomEightPuzzleModel> steps = new ArrayList<>();
