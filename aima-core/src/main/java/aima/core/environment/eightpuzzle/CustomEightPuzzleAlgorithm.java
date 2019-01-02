@@ -160,8 +160,8 @@ public class CustomEightPuzzleAlgorithm {
             initialPosition[NEUF] = new Coord(1,3);
             initialPosition[DIX] = new Coord(4,3);
             initialPosition[ONZE] = new Coord(3,3);
-            initialPosition[DOUZE] = new Coord(2,4);
-            initialPosition[TREIZE] = new Coord(1,4);
+            initialPosition[DOUZE] = new Coord(1,4);
+            initialPosition[TREIZE] = new Coord(2,4);
             initialPosition[QUATORZE] = new Coord(3,4);
             initialPosition[QUINZE] = new Coord(4,4);
         }
