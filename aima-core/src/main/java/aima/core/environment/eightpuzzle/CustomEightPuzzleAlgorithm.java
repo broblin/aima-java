@@ -30,12 +30,18 @@ public class CustomEightPuzzleAlgorithm {
     static int QUATORZE=13;
     static int QUINZE=14;
 
+    static final int A_STAR = 1;
+    static final int GREEDY_EXPLORATION = 2;
+    static final int HILL_CLIMBING = 3;
+    static final int SIMULATED_ANNEALING = 4;
+
     Map<GameArea,Integer> modelsWithMinimumCost = new HashMap<>();
     Map<CustomEightPuzzleModel,Integer> frontierModels = new HashMap<>();
 
     List<GameArea> greedyExplorationPreviousPositions = new ArrayList<>();
 
     /**
+     * like hill-climbing as well
      *
      * @param customEightPuzzleModel
      * @return
@@ -56,6 +62,33 @@ public class CustomEightPuzzleAlgorithm {
             return goNextStepWithGreedyExploration(nextCustomEightPuzzleModel);
         }
 
+    }
+
+    /**
+     * exloration par escalade
+     * @param customEightPuzzleModel
+     * @return
+     */
+    CustomEightPuzzleModel goNextStepWithHillClimbing(CustomEightPuzzleModel customEightPuzzleModel){
+        CustomEightPuzzleModel lastNotNullEightPuzzleModel=null;
+        Optional<CustomEightPuzzleModel> bestCustomEightPuzzleModel = Optional.ofNullable(customEightPuzzleModel);
+        int nbLoop = 0;
+
+        while(bestCustomEightPuzzleModel.isPresent() && !bestCustomEightPuzzleModel.get().isSolutionFound()){
+            System.out.println(String.format("item: %d %s",nbLoop,bestCustomEightPuzzleModel.get().gameArea.toString()));
+            lastNotNullEightPuzzleModel =  bestCustomEightPuzzleModel.get();
+            Optional<GameArea> bestGameArea = bestCustomEightPuzzleModel.get().findNextPiecesPosition().stream()
+                    .min((gameArea1, gameArea2) -> customEightPuzzleModel.heuristicFunction(gameArea1.piecesPosition) - customEightPuzzleModel.heuristicFunction(gameArea2.piecesPosition));
+            CustomEightPuzzleModel nextCustomEightPuzzleModel = new CustomEightPuzzleModel(customEightPuzzleModel,bestGameArea.get());
+            bestCustomEightPuzzleModel = Optional.of(nextCustomEightPuzzleModel);
+            nbLoop++;
+        }
+
+        if(!bestCustomEightPuzzleModel.isPresent()){
+            System.out.println(String.format("pas de solution trouvée en %d iterations, dernier item: %s",nbLoop,lastNotNullEightPuzzleModel.gameArea.toString()));
+            return null;
+        }
+        return bestCustomEightPuzzleModel.get();
     }
 
     /**
@@ -100,6 +133,19 @@ public class CustomEightPuzzleAlgorithm {
         }
     }
 
+    public CustomEightPuzzleModel useAlgorithm(CustomEightPuzzleModel customEightPuzzleModel,int algorithm){
+        switch(algorithm){
+            case GREEDY_EXPLORATION:
+                return this.goNextStepWithGreedyExploration(customEightPuzzleModel);
+            case A_STAR:
+                return this.goNextStepWithAStar(customEightPuzzleModel,0);
+            case HILL_CLIMBING:
+                return this.goNextStepWithHillClimbing(customEightPuzzleModel);
+            default:
+                return null; //TODO : recuit simulé
+        }
+    }
+
     public static void main(String[] args){
         int dim = 3;
         /**
@@ -115,8 +161,8 @@ public class CustomEightPuzzleAlgorithm {
         long startTime = System.currentTimeMillis();
         System.out.println(LocalDateTime.now());
         Coord[] initialPosition = new Coord[dim*dim-1];
-        int position = 4;
-        boolean useAStarAlgorithm = true;
+        int position = 2;
+        int useAlgorithm = HILL_CLIMBING;
 
         if(position == 1){
             initialPosition[UN] = new Coord(3,3);
@@ -170,8 +216,7 @@ public class CustomEightPuzzleAlgorithm {
         customEightPuzzleModel.initializePiecesPosition(initialPosition);
         CustomEightPuzzleAlgorithm customEightPuzzleAlgorithm = new CustomEightPuzzleAlgorithm();
 
-        CustomEightPuzzleModel solution = useAStarAlgorithm ? customEightPuzzleAlgorithm.goNextStepWithAStar(customEightPuzzleModel,0) : customEightPuzzleAlgorithm.goNextStepWithGreedyExploration(customEightPuzzleModel);
-
+        CustomEightPuzzleModel solution = customEightPuzzleAlgorithm.useAlgorithm(customEightPuzzleModel,useAlgorithm);
         long stopTime = System.currentTimeMillis();
         System.out.println(String.format("temps passé en ms : %d",stopTime-startTime));
 
