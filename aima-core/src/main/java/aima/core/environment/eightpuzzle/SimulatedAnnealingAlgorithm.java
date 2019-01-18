@@ -21,27 +21,31 @@ public class SimulatedAnnealingAlgorithm {
      */
     CustomEightPuzzleModel goNextStep(CustomEightPuzzleModel customEightPuzzleModel){
         CustomEightPuzzleModel lastNotNullEightPuzzleModel=null;
-        Optional<CustomEightPuzzleModel> nextCustomEightPuzzleModel = Optional.ofNullable(customEightPuzzleModel);
+        Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel = Optional.ofNullable(customEightPuzzleModel);
         int nbLoop = 0;
         int temperature=0;
 
-        while(nextCustomEightPuzzleModel.isPresent() && !nextCustomEightPuzzleModel.get().isSolutionFound()){
-            System.out.println(String.format("item: %d %s",nbLoop,nextCustomEightPuzzleModel.get().gameArea.toString()));
+        while(currentCustomEightPuzzleModel.isPresent() && !currentCustomEightPuzzleModel.get().isSolutionFound()){
+            System.out.println(String.format("item: %d %s",nbLoop,currentCustomEightPuzzleModel.get().gameArea.toString()));
+            //Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel = currentCustomEightPuzzleModel;
             temperature = schema(nbLoop);
 
-            lastNotNullEightPuzzleModel =  nextCustomEightPuzzleModel.get();
+            lastNotNullEightPuzzleModel =  currentCustomEightPuzzleModel.get();
 
-            Optional<GameArea> bestGameArea = nextCustomEightPuzzleModel.get().findNextPiecesPosition().stream()
-                    .min((gameArea1, gameArea2) -> customEightPuzzleModel.heuristicFunction(gameArea1.piecesPosition) - customEightPuzzleModel.heuristicFunction(gameArea2.piecesPosition));
-            nextCustomEightPuzzleModel = Optional.of(new CustomEightPuzzleModel(customEightPuzzleModel,bestGameArea.get()));
+            Optional<CustomEightPuzzleModel>  candidateNextCurrentCustomEightPuzzleModel = chooseNextCustomEightPuzzleModel(currentCustomEightPuzzleModel);
+            int delta = this.calcDelta(currentCustomEightPuzzleModel,candidateNextCurrentCustomEightPuzzleModel);
+            if(delta > 0 || randomOK(delta,temperature)){
+                currentCustomEightPuzzleModel = candidateNextCurrentCustomEightPuzzleModel;
+            }
+
             nbLoop++;
         }
 
-        if(!nextCustomEightPuzzleModel.isPresent()){
+        if(!currentCustomEightPuzzleModel.isPresent()){
             System.out.println(String.format("pas de solution trouvée en %d iterations, dernier item: %s",nbLoop,lastNotNullEightPuzzleModel.gameArea.toString()));
             return null;
         }
-        return nextCustomEightPuzzleModel.get();
+        return currentCustomEightPuzzleModel.get();
     }
 
     private int schema(int t){
@@ -52,6 +56,21 @@ public class SimulatedAnnealingAlgorithm {
     private Optional<CustomEightPuzzleModel> chooseNextCustomEightPuzzleModel(Optional<CustomEightPuzzleModel> current){
         //TODO choisir au hasard
         current.get().findNextPiecesPosition();
+        /*Optional<GameArea> bestGameArea = nextCustomEightPuzzleModel.get().findNextPiecesPosition().stream()
+                    .min((gameArea1, gameArea2) -> customEightPuzzleModel.heuristicFunction(gameArea1.piecesPosition) - customEightPuzzleModel.heuristicFunction(gameArea2.piecesPosition));
+        nextCustomEightPuzzleModel = Optional.of(new CustomEightPuzzleModel(customEightPuzzleModel,bestGameArea.get()));
+        */
         return null;
+    }
+
+    private int calcDelta(Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel,Optional<CustomEightPuzzleModel> nextCustomEightPuzzleModel){
+        //TODO
+        return -1;
+    }
+
+    private boolean randomOK(int delta,int temperature){
+        //TODO
+        //formula : e^delta/temperature
+        return false;
     }
 }
