@@ -1,5 +1,6 @@
 package aima.core.environment.eightpuzzle;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,11 +24,10 @@ public class SimulatedAnnealingAlgorithm {
         CustomEightPuzzleModel lastNotNullEightPuzzleModel=null;
         Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel = Optional.ofNullable(customEightPuzzleModel);
         int nbLoop = 0;
-        int temperature=0;
+        int temperature;
 
         while(currentCustomEightPuzzleModel.isPresent() && !currentCustomEightPuzzleModel.get().isSolutionFound()){
             System.out.println(String.format("item: %d %s",nbLoop,currentCustomEightPuzzleModel.get().gameArea.toString()));
-            //Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel = currentCustomEightPuzzleModel;
             temperature = schema(nbLoop);
 
             lastNotNullEightPuzzleModel =  currentCustomEightPuzzleModel.get();
@@ -54,23 +54,19 @@ public class SimulatedAnnealingAlgorithm {
 
 
     private Optional<CustomEightPuzzleModel> chooseNextCustomEightPuzzleModel(Optional<CustomEightPuzzleModel> current){
-        //TODO choisir au hasard
-        current.get().findNextPiecesPosition();
-        /*Optional<GameArea> bestGameArea = nextCustomEightPuzzleModel.get().findNextPiecesPosition().stream()
-                    .min((gameArea1, gameArea2) -> customEightPuzzleModel.heuristicFunction(gameArea1.piecesPosition) - customEightPuzzleModel.heuristicFunction(gameArea2.piecesPosition));
-        nextCustomEightPuzzleModel = Optional.of(new CustomEightPuzzleModel(customEightPuzzleModel,bestGameArea.get()));
-        */
-        return null;
+        List<GameArea> candidates = current.get().findNextPiecesPosition();
+        int chosenIndex = Long.valueOf(Math.round(candidates.size() * Math.random())).intValue();
+        GameArea chosenGameArea = candidates.get(chosenIndex);
+        return Optional.of(new CustomEightPuzzleModel(current.get(),chosenGameArea));
     }
 
     private int calcDelta(Optional<CustomEightPuzzleModel> currentCustomEightPuzzleModel,Optional<CustomEightPuzzleModel> nextCustomEightPuzzleModel){
-        //TODO
-        return -1;
+        return currentCustomEightPuzzleModel.get().heuristicFunction() - nextCustomEightPuzzleModel.get().heuristicFunction();
     }
 
     private boolean randomOK(int delta,int temperature){
-        //TODO
         //formula : e^delta/temperature
-        return false;
+        double formula =  Math.exp(delta/temperature);
+        return Math.random() < formula;
     }
 }

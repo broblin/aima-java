@@ -34,6 +34,7 @@ public class CustomEightPuzzleAlgorithm {
     static final int GREEDY_EXPLORATION = 2;
     static final int HILL_CLIMBING = 3;
     static final int SIMULATED_ANNEALING = 4;
+    static final int SIMULATED_ANNEALING_PARAMETER = 100;
 
     Map<GameArea,Integer> modelsWithMinimumCost = new HashMap<>();
     Map<CustomEightPuzzleModel,Integer> frontierModels = new HashMap<>();
@@ -141,8 +142,10 @@ public class CustomEightPuzzleAlgorithm {
                 return this.goNextStepWithAStar(customEightPuzzleModel,0);
             case HILL_CLIMBING:
                 return this.goNextStepWithHillClimbing(customEightPuzzleModel);
+            case SIMULATED_ANNEALING:
             default:
-                return null; //TODO : recuit simulé
+                SimulatedAnnealingAlgorithm simulatedAnnealingAlgorithm = new SimulatedAnnealingAlgorithm(SIMULATED_ANNEALING_PARAMETER);
+                return simulatedAnnealingAlgorithm.goNextStep(customEightPuzzleModel);
         }
     }
 
@@ -162,7 +165,7 @@ public class CustomEightPuzzleAlgorithm {
         System.out.println(LocalDateTime.now());
         Coord[] initialPosition = new Coord[dim*dim-1];
         int position = 2;
-        int useAlgorithm = HILL_CLIMBING;
+        int useAlgorithm = A_STAR;
 
         if(position == 1){
             initialPosition[UN] = new Coord(3,3);
