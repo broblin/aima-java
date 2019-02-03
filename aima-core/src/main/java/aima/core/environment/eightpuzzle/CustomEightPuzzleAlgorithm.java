@@ -164,7 +164,7 @@ public class CustomEightPuzzleAlgorithm {
         long startTime = System.currentTimeMillis();
         System.out.println(LocalDateTime.now());
         Coord[] initialPosition = new Coord[dim*dim-1];
-        int position = 3;
+        int position = 4;
         int useAlgorithm = SIMULATED_ANNEALING;
 
         if(position == 1){
@@ -221,7 +221,6 @@ public class CustomEightPuzzleAlgorithm {
 
         CustomEightPuzzleModel solution = customEightPuzzleAlgorithm.useAlgorithm(customEightPuzzleModel,useAlgorithm);
         long stopTime = System.currentTimeMillis();
-        System.out.println(String.format("temps passé en ms : %d",stopTime-startTime));
 
         CustomEightPuzzleModel step = solution;
         List<CustomEightPuzzleModel> steps = new ArrayList<>();
@@ -232,6 +231,6 @@ public class CustomEightPuzzleAlgorithm {
         for(int i=steps.size()-1;i>=0;i--){
             System.out.println(String.format("etape %d: %s ",steps.size()-i-1,steps.get(i).gameArea.emptyCase.toString()));
         }
-
+        System.out.println(String.format("temps passé en ms : %d",stopTime-startTime));
     }
 }
