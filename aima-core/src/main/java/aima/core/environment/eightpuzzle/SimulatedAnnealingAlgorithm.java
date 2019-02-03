@@ -27,7 +27,7 @@ public class SimulatedAnnealingAlgorithm {
         int temperature;
 
         while(currentCustomEightPuzzleModel.isPresent() && !currentCustomEightPuzzleModel.get().isSolutionFound()){
-            System.out.println(String.format("item: %d %s",nbLoop,currentCustomEightPuzzleModel.get().gameArea.toString()));
+            //System.out.println(String.format("item: %d %s",nbLoop,currentCustomEightPuzzleModel.get().gameArea.toString()));
             temperature = schema(nbLoop);
 
             lastNotNullEightPuzzleModel =  currentCustomEightPuzzleModel.get();
@@ -55,7 +55,9 @@ public class SimulatedAnnealingAlgorithm {
 
     private Optional<CustomEightPuzzleModel> chooseNextCustomEightPuzzleModel(Optional<CustomEightPuzzleModel> current){
         List<GameArea> candidates = current.get().findNextPiecesPosition();
-        int chosenIndex = Long.valueOf(Math.round(candidates.size() * Math.random())).intValue();
+        double randomValue = Math.random();
+        int chosenIndex = Double.valueOf(Math.floor(candidates.size() * randomValue)).intValue();
+        //System.out.println(String.format("chosenIndex : %d,randomValue : %f, candidates: %s",chosenIndex,randomValue,candidates));
         GameArea chosenGameArea = candidates.get(chosenIndex);
         return Optional.of(new CustomEightPuzzleModel(current.get(),chosenGameArea));
     }

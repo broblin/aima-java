@@ -34,7 +34,7 @@ public class CustomEightPuzzleAlgorithm {
     static final int GREEDY_EXPLORATION = 2;
     static final int HILL_CLIMBING = 3;
     static final int SIMULATED_ANNEALING = 4;
-    static final int SIMULATED_ANNEALING_PARAMETER = 100;
+    static final int SIMULATED_ANNEALING_PARAMETER = 50;
 
     Map<GameArea,Integer> modelsWithMinimumCost = new HashMap<>();
     Map<CustomEightPuzzleModel,Integer> frontierModels = new HashMap<>();
@@ -164,8 +164,8 @@ public class CustomEightPuzzleAlgorithm {
         long startTime = System.currentTimeMillis();
         System.out.println(LocalDateTime.now());
         Coord[] initialPosition = new Coord[dim*dim-1];
-        int position = 2;
-        int useAlgorithm = A_STAR;
+        int position = 3;
+        int useAlgorithm = SIMULATED_ANNEALING;
 
         if(position == 1){
             initialPosition[UN] = new Coord(3,3);
