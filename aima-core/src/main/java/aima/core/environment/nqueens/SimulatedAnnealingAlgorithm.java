@@ -25,7 +25,7 @@ public class SimulatedAnnealingAlgorithm {
         int temperature;
 
         while(currentGameArea.isPresent() && !currentGameArea.get().isSolutionFound()){
-            //System.out.println(String.format("item: %d %s",nbLoop,currentGameArea.get().gameArea.toStringInChessCoordLabel()));
+            System.out.println(String.format("item: %d %s",nbLoop,currentGameArea.get().toStringInChessCoordLabel()));
             temperature = schema(nbLoop);
 
             lastNotNullGameArea =  currentGameArea.get();

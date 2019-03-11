@@ -2,6 +2,7 @@ package aima.core.environment.nqueens;
 
 import aima.core.environment.vacuum.Coord;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class GameArea {
     }
 
     public boolean alreadyOccupied(Coord candidate){
-        return Arrays.binarySearch(piecesPosition,candidate) == 1;
+        return Arrays.asList(piecesPosition).contains(candidate);
     }
 
     /**
@@ -95,11 +96,13 @@ public class GameArea {
 
     public int calcInDiagonals(){
         int totalScore = 0;
-        totalScore += calcInLine((coords,pos) -> Arrays.stream(coords).filter(queen -> queen.getX() - pos == queen.getY() ).count());
-        totalScore += calcInLine((coords,pos) -> Arrays.stream(coords).filter(queen -> queen.getX() + pos == queen.getY() ).count());
-        totalScore += calcInLine((coords,pos) -> Arrays.stream(coords).filter(queen -> queen.getY() - pos == queen.getX() ).count());
-        totalScore += calcInLine((coords,pos) -> Arrays.stream(coords).filter(queen -> queen.getY() + pos == queen.getX() ).count());
-
+        for(int i=0;i<CHESS_SIZE;i++){
+            final Coord piece = piecesPosition[i];
+            long score = Arrays.stream(piecesPosition).filter(queen -> Math.abs(queen.getX() - piece.getX()) == Math.abs(queen.getY() - piece.getY())).count();
+            if(score != 1L){
+                totalScore += score;
+            }
+        }
         return totalScore;
     }
 
@@ -116,8 +119,28 @@ public class GameArea {
     }
 
     public List<GameArea> findNextPiecesPosition(){
-        //TODO
-        return null;
+        List<GameArea> results = new ArrayList<>();
+        for(int i = 0;i< piecesPosition.length;i++){
+            results.addAll(findAllNextPiecesPositionFromAQueen(i));
+        }
+        return results;
+    }
+
+    protected List<GameArea> findAllNextPiecesPositionFromAQueen(int index){
+        List<GameArea> results = new ArrayList<>();
+        for(int i=0;i<CHESS_SIZE;i++){
+            for(int j=0;j<CHESS_SIZE;j++){
+                Coord nextPiecePosition = new Coord(i,j);
+                if(!alreadyOccupied(nextPiecePosition)){
+                    Coord[] newCoords =  Arrays.copyOf(piecesPosition,piecesPosition.length);
+                    newCoords[index] = nextPiecePosition;
+                    GameArea gameArea = new GameArea();
+                    gameArea.piecesPosition = newCoords;
+                    results.add(gameArea);
+                }
+            }
+        }
+        return results;
     }
 
     @Override

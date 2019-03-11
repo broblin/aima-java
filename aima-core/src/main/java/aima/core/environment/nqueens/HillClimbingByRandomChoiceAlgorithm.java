@@ -19,7 +19,7 @@ public class HillClimbingByRandomChoiceAlgorithm {
             Optional<GameArea> bestGameArea = optionalGameArea.get().findNextPiecesPosition().stream()
                     .min((gameArea1, gameArea2) -> gameArea.heuristicFunction() - gameArea.heuristicFunction());
             nbLoop++;
-
+            //alors que c'est un while dans l'algorithme d'escalade du premier choix
             if(!bestGameArea.isPresent()|| lastNotNullGameArea.heuristicFunction() < bestGameArea.get().heuristicFunction()){
                 System.out.println(String.format("nouvel essai car pas de solution trouvée en %d iterations, dernier item: %s",nbLoop,lastNotNullGameArea.toStringInChessCoordLabel()));
                 bestGameArea = Optional.of(new GameArea());
